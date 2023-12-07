@@ -15,7 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('codigo_ruta');
             $table->integer('tiempo_total');
-            $table->string('estado');
+            $table->string('estado_ruta');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

@@ -1,127 +1,126 @@
+{{-- VISTA GENERAL PARA LOGIN Y REGISTRO --}}
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <link rel="apple-touch-icon" sizes="76x76" href="{{asset('img/apple-icon.png')}}">
+  <link rel="icon" type="image/png" href="{{asset('img/favicon.png')}}">
   <title>
-   {{config('app.name')}} |@yield('title')
+    Material Dashboard 2 by Creative Tim
   </title>
-  <!-- Favicon -->
-  <link href="{{asset('img/brand/favicon.png')}}" rel="icon" type="image/png">
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-  <!-- Icons -->
-  <link href="{{asset('js/plugins/nucleo/css/nucleo.css')}}" rel="stylesheet" />
-  <link href="{{asset('js/plugins/@fortawesome/fontawesome-free/css/all.min.css')}}" rel="stylesheet" />
+  <!--     Fonts and icons     -->
+  <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
+  <!-- Nucleo Icons -->
+  <link href="{{asset('css/nucleo-icons.css')}}" rel="stylesheet" />
+  <link href="{{asset('css/nucleo-svg.css')}}" rel="stylesheet" />
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
   <!-- CSS Files -->
-  <link href="{{asset('css/argon-dashboard.css?v=1.1.2')}}" rel="stylesheet" />
+  <link id="pagestyle" href="{{asset('css/material-dashboard.css?v=3.1.0')}}" rel="stylesheet" />
+  <!-- Nepcha Analytics (nepcha.com) -->
+  <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
+  <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
 </head>
 
-<body class="bg-default">
-  <div class="main-content">
-    <!-- Navbar -->
-    <nav class="navbar navbar-top navbar-horizontal navbar-expand-md navbar-dark">
-      <div class="container px-4">
-        <a class="navbar-brand" href="{{url('/')}}">
-          <img src="{{asset('img/brand/white.png')}}" />
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse-main" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbar-collapse-main">
-          <!-- Collapse header -->
-          <div class="navbar-collapse-header d-md-none">
-            <div class="row">
-              <div class="col-6 collapse-brand">
-                <a href="../index.html">
-                  <img src="{{asset('img/brand/blue.png')}}">
-                </a>
-              </div>
-              <div class="col-6 collapse-close">
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse-main" aria-controls="sidenav-main" aria-expanded="false" aria-label="Toggle sidenav">
-                  <span></span>
-                  <span></span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- Navbar items -->
-          <ul class="navbar-nav ml-auto">
+<body class="bg-gray-200">
+  <div class="container position-sticky z-index-sticky top-0">
+    <div class="row">
+      <div class="col-12">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg blur border-radius-xl top-0 z-index-3 shadow position-absolute my-3 py-2 start-0 end-0 mx-4">
+          <div class="container-fluid ps-2 pe-0">
 
-            <li class="nav-item">
-              <a class="nav-link nav-link-icon" href="{{route('home')}}">
-                {{-- <i class="ni ni-circle-08"></i> --}}
-                <span class="nav-link-inner--text">Home</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link nav-link-icon" href="{{route('login')}}">
-                <i class="ni ni-key-25"></i>
-                <span class="nav-link-inner--text">Iniciar Sesión</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-    <!-- Header -->
-    <div class="header bg-gradient-primary py-6 py-lg-7">
-      <div class="container">
-        <div class="header-body text-center mb-7">
-          <div class="row justify-content-center">
-            <div class="col-lg-5 col-md-6">
-              <h1 class="text-white">@yield('title','Bienvenidos')!</h1>
+            <div class="collapse navbar-collapse" id="navigation">
+              <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                  <a class="nav-link me-2" href="{{route('register')}}">
+                    <i class="fas fa-user-circle opacity-6 text-dark me-1"></i>
+                    Regístrate
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link me-2" href="{{route('login')}}">
+                    <i class="fas fa-key opacity-6 text-dark me-1"></i>
+                    Iniciar sesión
+                  </a>
+                </li>
+              </ul>
 
             </div>
           </div>
-        </div>
-      </div>
-      <div class="separator separator-bottom separator-skew zindex-100">
-        <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
-          <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
-        </svg>
+        </nav>
+        <!-- End Navbar -->
       </div>
     </div>
-    @yield('content')
-    <!-- Footer -->
-    <footer class="py-5">
-      <div class="container">
-        <div class="row align-items-center justify-content-xl-between">
-          <div class="col-xl-6">
-            <div class="copyright text-center text-xl-left text-muted">
-              © 2023 <a href="/" class="font-weight-bold ml-1" >{{config('app.name')}}</a>
+  </div>
+  <main class="main-content  mt-0">
+    {{-- header --}}
+    <div class="page-header align-items-start min-vh-100" style="background-image: url('https://images.unsplash.com/photo-1497294815431-9365093b7331?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80');">
+      <span class="mask bg-gradient-dark opacity-6"></span>
+      {{-- Content --}}
+
+        @yield('content')
+
+      {{-- footer --}}
+      <footer class="footer position-absolute bottom-2 py-2 w-100">
+        <div class="container">
+          <div class="row align-items-center justify-content-lg-between">
+            <div class="col-12 col-md-6 my-auto">
+              <div class="copyright text-center text-sm text-white text-lg-start">
+                © <script>
+                  document.write(new Date().getFullYear())
+                </script>,
+                <i class="fa fa-heart" aria-hidden="true"></i> by
+                <a href="/" class="font-weight-bold text-white">{{ config('app.name') }}</a>
+                .
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <ul class="nav nav-footer justify-content-center justify-content-lg-end">
+                <li class="nav-item">
+                  <a href="https://www.creative-tim.com" class="nav-link text-white" target="_blank">Creative Tim</a>
+                </li>
+                <li class="nav-item">
+                  <a href="https://www.creative-tim.com/presentation" class="nav-link text-white" target="_blank">About Us</a>
+                </li>
+                <li class="nav-item">
+                  <a href="https://www.creative-tim.com/blog" class="nav-link text-white" target="_blank">Blog</a>
+                </li>
+                <li class="nav-item">
+                  <a href="https://www.creative-tim.com/license" class="nav-link pe-0 text-white" target="_blank">License</a>
+                </li>
+              </ul>
             </div>
           </div>
-          <div class="col-xl-6">
-            <ul class="nav nav-footer justify-content-center justify-content-xl-end">
-
-              <li class="nav-item">
-                <a href="#" class="nav-link" target="_blank">¿Quiénes somos?</a>
-              </li>
-
-
-            </ul>
-          </div>
         </div>
-      </div>
-    </footer>
-  </div>
-  <!--   Core   -->
-  <script src="{{asset('js/plugins/jquery/dist/jquery.min.js')}}"></script>
-  <script src="{{asset('js/plugins/bootstrap/dist/js/bootstrap.bundle.min.js')}}"></script>
-  <!--   Optional JS   -->
-  <!--   Argon JS   -->
-  <script src="{{asset('js/argon-dashboard.min.js?v=1.1.2')}}"></script>
-  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+      </footer>
+    </div>
+  </main>
+  <!--   Core JS Files   -->
+  <script src="{{asset('js/core/popper.min.js')}}"></script>
+  <script src="{{asset('js/core/bootstrap.min.js')}}"></script>
+  <script src="{{asset('js/plugins/perfect-scrollbar.min.js')}}"></script>
+  <script src="{{asset('js/plugins/smooth-scrollbar.min.js')}}"></script>
   <script>
-    window.TrackJS &&
-      TrackJS.install({
-        token: "ee6fab19c5a04ac1a32a645abde4613a",
-        application: "argon-dashboard-free"
-      });
+    var win = navigator.platform.indexOf('Win') > -1;
+    if (win && document.querySelector('#sidenav-scrollbar')) {
+      var options = {
+        damping: '0.5'
+      }
+      Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
+    }
   </script>
+  <!-- Github buttons -->
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="{{asset('js/material-dashboard.min.js?v=3.1.0')}}"></script>
 </body>
 
 </html>
+
+

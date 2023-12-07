@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('longitud');
             $table->string('latitud');
             $table->string('url_map');
-            $table->string('estado');
+            $table->string('estado_ubicacion');
 
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

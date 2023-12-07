@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('subgrupos', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('nombre',150);
+            $table->string('nombre_subgrupo');
             $table->string('descripcion')->nullable();
-            $table->unsignedBigInteger('grupo_id');
+            $table->unsignedBigInteger('grupo_id')->constrained('grupos');
             $table->foreign('grupo_id')->references('id')->on('grupos')->onDelete('cascade');
             $table->timestamps();
         });

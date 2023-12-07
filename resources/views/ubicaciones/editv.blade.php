@@ -13,7 +13,7 @@
                     <h3 class="mb-0">Editar la ubicacion para el {{$ubicacion->user()->first()->role}} {{$ubicacion->user()->first()->name}}</h3>
                 </div>
                 <div class="col text-right">
-                    <a href="{{ url('/clientes') }}" class="btn btn-sm btn-success">
+                    <a href="{{ url('/vendedores') }}" class="btn btn-sm btn-success">
                         <i class="fas fa-chevron-left"></i>
                         Regresar
                     </a>

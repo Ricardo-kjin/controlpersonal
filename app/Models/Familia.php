@@ -9,7 +9,12 @@ class Familia extends Model
 {
     use HasFactory;
 
-    public function productos(){
-        return $this->hasMany(Producto::class);
+    protected $fillable = [
+        'nombre_familia'
+    ];
+
+    public function productos()
+    {
+        return $this->hasMany(Producto::class, 'familia_id');
     }
 }

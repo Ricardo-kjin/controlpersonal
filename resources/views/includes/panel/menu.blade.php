@@ -1,135 +1,278 @@
-{{-- MENU DEL DASHBOARD --}}
-<h6 class="navbar-heading text-muted">
-    @if (auth()->user()->role == 'admin')
-        Gestión de Usuario
-    @else
-        Menú
-    @endif
-
-</h6>
 <ul class="navbar-nav">
-    {{-- <li class="nav-item active">
-        <a class="nav-link active" href="#">
-            <i class="ni ni-tv-2 text-danger"></i> Gestion de Usuario
-        </a>
-    </li> --}}
-    @if (auth()->user()->role=='admin' || auth()->user()->role=='vendedor' )
-        <li class="nav-item">
-            <a class="nav-link " href="{{ url('/vendedores') }}">
-                <i class="fas fa-user-tie text-warning"></i> Vendedores
-            </a>
-        </li>
-    @endif
-    @if (auth()->user()->role=='admin')
-        <li class="nav-item">
-            <a class="nav-link " href="{{ url('/monitores') }}">
-                <i class="fas fa-user-cog text-danger"></i> Encargado Monitoreo
-            </a>
-        </li>
-    @endif
-    @if (auth()->user()->role=='admin' || auth()->user()->role=='cliente' )
-        <li class="nav-item">
-            <a class="nav-link " href="{{ url('/clientes') }}">
-                <i class="fas fa-user text-success"></i> Cliente
-            </a>
-        </li>
-    @endif
+
+    {{-- Gestion personal --}}
     <li class="nav-item">
-        <a class="nav-link" href="{{ route('logout') }}"
-            onclick="event.preventDefault(); document.getElementById('form-logout').submit();">
-            <i class="fas fa-sign-in-alt"></i> Cerrar Sesión
+        <a class="nav-link text-white" data-bs-toggle="collapse" href="#gruposMenu" role="button" aria-expanded="false">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons">people</i>
+            </div>
+            {{-- <span class="nav-link-text ms-1">Gestion del Personal</span> --}}
+            <h6 class="text-uppercase text-xs text-white font-weight-bolder opacity-8">Control del Personal</h6>
         </a>
-        <form action="{{ route('logout') }}" method="POST" style="display: none" id="form-logout">
-            @csrf
-        </form>
-    </li>
-</ul>
-@if (auth()->user()->role=='admin' )
-
-    <!-- Divider -->
-    <hr class="my-1">
-    <!-- Heading -->
-    <h6 class="navbar-heading text-muted">GESTION DE PRODUCTO</h6>
-    <!-- Navigation -->
-    <ul class="navbar-nav mb-md-3" >
-        <li class="nav-item">
-            <a class="nav-link" href="{{url('/familias')}}">
-                <i class="ni ni-bullet-list-67 text-primary"></i>Familia
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{url('/grupos')}}">
-                <i class="ni ni-building text-info" ></i> Grupo
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{url('/subgrupos')}}">
-                <i class="ni ni-basket text-blue"></i> Subgrupo
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="{{url('/productos')}}">
-                <i class="fas fa-car-battery"></i>Producto
-            </a>
-        </li>
-    </ul>
-@endif
-@if (auth()->user()->role=='admin' || auth()->user()->role=='vendedor' )
-
-    <hr class="my-1">
-    <!-- Heading -->
-    <h6 class="navbar-heading text-muted">GESTION DE RUTA</h6>
-    <!-- Navigation -->
-    <ul class="navbar-nav mb-md-3" >
-        <li class="nav-item">
-            <a class="nav-link" href="{{url('/rutas')}}">
-                <i class="fas fa-route text-primary"></i>RUTAS
-            </a>
-        </li>
-        @if (auth()->user()->role=='admin')
-            <li class="nav-item">
-                <a class="nav-link" href="/vermaps">
-                    <i class="fas fa-clock text-danger"></i> MONITOREO DE VENDEDOR
-                </a>
-            </li>
-        @endif
-</ul>
-@endif
-@if (auth()->user()->role=='admin' )
-    <hr class="my-1">
-    <!-- Heading -->
-    <h6 class="navbar-heading text-muted">REPORTES</h6>
-    <!-- Navigation -->
-    <ul class="navbar-nav mb-md-3" >
-        <li class="nav-item">
-            <a class="nav-link" href="{{url('/reportesprom')}}">
-                <i class="fas fa-route text-primary"></i>Vendedores Promedio de visita
-            </a>
-        </li>
-
-    </ul>
-
-@endif
-
-
-
-{{-- PARA EJEMPLO Y INFORMACION DE LA PAGINA DE PLANTILLA --}}
-<h6 class="navbar-heading text-muted" style="display: none">GESTION DE PRODUCTO</h6>
-<!-- Navigation -->
-<ul class="navbar-nav mb-md-3" style="display: none">
-    <li class="nav-item">
-        <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/getting-started/overview.html">
-            <i class="ni ni-spaceship"></i> Getting started
-        </a>
+        <div class="collapse" id="gruposMenu">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url('/vendedores') }}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            {{-- <i class="material-icons opacity-10">person_outline</i> --}}
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Vendedores</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url('/vendedores') }}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            {{-- <i class="material-icons opacity-10">group_work</i> --}}
+                            <i class="fas fa-user-cog"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Supervisores</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/foundation/colors.html">
-            <i class="ni ni-palette"></i> Foundation
+        <a class="nav-link text-white" data-bs-toggle="collapse" href="#gestionclientes" role="button"
+            aria-expanded="false">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                {{-- <i class="material-icons opacity-10">person</i> --}}
+                <i class="fas fa-user"></i>
+            </div>
+            {{-- <span class="nav-link-text ms-1">Gestion del Personal</span> --}}
+            <h6 class="text-uppercase text-xs text-white font-weight-bolder opacity-8">Control de Clientes</h6>
         </a>
+        <div class="collapse" id="gestionclientes">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url('/clientes') }}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            {{-- <i class="material-icons opacity-10">person_outline</i> --}}
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Clientes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url('/clientes/create') }}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            {{-- <i class="material-icons opacity-10">group_work</i> --}}
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Agregar</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    {{-- Gestion de Productos --}}
+    <li class="nav-item">
+        <a class="nav-link text-white" data-bs-toggle="collapse" href="#gestionproductos" role="button"
+            aria-expanded="false">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                {{-- <i class="material-icons opacity-10">person</i> --}}
+                <i class="fas fa-shopping-bag"></i>
+            </div>
+            {{-- <span class="nav-link-text ms-1">Gestion del Personal</span> --}}
+            <h6 class="text-uppercase text-xs text-white font-weight-bolder opacity-8">Gestion de Productos</h6>
+        </a>
+        <div class="collapse" id="gestionproductos">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url('/familias') }}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            {{-- <i class="material-icons opacity-10">person_outline</i> --}}
+                            <i class="fas fa-cube"></i> <i class="fas fa-users"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Familia</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url('/grupos') }}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            {{-- <i class="material-icons opacity-10">group_work</i> --}}
+                            <i class="fas fa-cube"></i> <i class="fas fa-circle"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Grupo</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url('/subgrupos') }}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            {{-- <i class="material-icons opacity-10">group_work</i> --}}
+                            <i class="fas fa-cube"></i> <i class="fas fa-circle-notch"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Sub Grupo</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url('/productos') }}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            {{-- <i class="material-icons opacity-10">group_work</i> --}}
+                            <i class="fas fa-battery-full">-</i><i class="fas fa-cogs"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Productos</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </li>
+    {{-- Gestioon de ruta --}}
+    <li class="nav-item">
+        <a class="nav-link text-white" data-bs-toggle="collapse" href="#gestionrutas" role="button"
+            aria-expanded="false">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                {{-- <i class="material-icons opacity-10">map</i> --}}
+                <i class="fas fa-map"></i>
+            </div>
+            {{-- <span class="nav-link-text ms-1">Gestion del Personal</span> --}}
+            <h6 class="text-uppercase text-xs text-white font-weight-bolder opacity-8">Gestion de Rutas</h6>
+        </a>
+        <div class="collapse" id="gestionrutas">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url('/rutas') }}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            {{-- <i class="material-icons opacity-10">person_outline</i> --}}
+                            <i class="fas fa-route"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Rutas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url('/vermaps') }}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            {{-- <i class="material-icons opacity-10">group_work</i> --}}
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Monitoreo</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </li>
+
+    {{-- Gestioon de Reportes --}}
+    <li class="nav-item">
+        <a class="nav-link text-white" data-bs-toggle="collapse" href="#reportes" role="button"
+            aria-expanded="false">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                {{-- <i class="material-icons">insert_chart</i> --}}
+                <i class="fas fa-chart-bar"></i>
+            </div>
+            {{-- <span class="nav-link-text ms-1">Gestion del Personal</span> --}}
+            <h6 class="text-uppercase text-xs text-white font-weight-bolder opacity-8">Reportes</h6>
+        </a>
+        <div class="collapse" id="reportes">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url('/reportesprom') }}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            {{-- <i class="material-icons opacity-10">person_outline</i> --}}
+                            <i class="material-icons opacity-10">multiline_chart</i>
+                            {{-- <i class="fas fa-file-alt"></i> --}}
+                        </div>
+                        <span class="nav-link-text ms-1">Promedio de visita</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </li>
+
+    {{-- Gestioon de Reportes --}}
+    <li class="nav-item">
+        <a class="nav-link text-white" data-bs-toggle="collapse" href="#cuentas" role="button"
+            aria-expanded="false">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                {{-- <i class="material-icons opacity-10">person</i> --}}
+                <i class="fas fa-cogs"></i>
+            </div>
+            {{-- <span class="nav-link-text ms-1">Gestion del Personal</span> --}}
+            <h6 class="text-uppercase text-xs text-white font-weight-bolder opacity-8">Gestionar Cuentas</h6>
+        </a>
+        <div class="collapse" id="cuentas">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            {{-- <i class="material-icons opacity-10">person_outline</i> --}}
+                            <i class="fas fa-credit-card"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Cuentas</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons">attach_money</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Transacciones</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </li>
+
+    {{-- Gestioon de Reportes --}}
+    <li class="nav-item">
+        <a class="nav-link text-white" data-bs-toggle="collapse" href="#catalogo" role="button"
+            aria-expanded="false">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="fas fa-book"></i>
+            </div>
+            {{-- <span class="nav-link-text ms-1">Gestion del Personal</span> --}}
+            <h6 class="text-uppercase text-xs text-white font-weight-bolder opacity-8">Catalogo Promocion</h6>
+        </a>
+        <div class="collapse" id="catalogo">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            {{-- <i class="material-icons opacity-10">person_outline</i> --}}
+                            <i class="material-icons">list</i>
+                        </div>
+                        <span class="nav-link-text ms-1">Catalogo</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            {{-- <i class="material-icons opacity-10">person_outline</i> --}}
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Promociones</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </li>
+
+    {{-- Perfil --}}
+    <li class="nav-item mt-3">
+        <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Gestionar Perfil</h6>
     </li>
     <li class="nav-item">
-        <a class="nav-link" href="https://demos.creative-tim.com/argon-dashboard/docs/components/alerts.html">
-            <i class="ni ni-ui-04"></i> Components
+        <a class="nav-link text-white " href="#">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">person</i>
+            </div>
+            <span class="nav-link-text ms-1">Perfil</span>
         </a>
     </li>
-</ul>
+
+    <li class="nav-item">
+        <a class="nav-link text-white " href="{{ route('logout') }}"
+            onclick="event.preventDefault(); document.getElementById('formLogout').submit();">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">exit_to_app</i>
+            </div>
+            <span class="nav-link-text ms-1">Cerrar sesión</span>
+            <form action="{{ route('logout') }}" method="POST" style="display: none;" id="formLogout">
+                @csrf
+            </form>
+        </a>
+    </li>

@@ -9,12 +9,19 @@ class Ubicacion extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'longitud', 'latitud', 'url_map', 'estado_ubicacion', 'user_id'
+    ];
 
-    public function user(){
-        return $this->belongsTo(User::class);
+    // Relación con la tabla "users"
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function rutas(){
-        return $this->belongsToMany(Ruta::class, 'ruta_ubicacion')->withPivot('id', 'fecha_ini', 'fecha_fin', 'estado_visita');;
+    // Relación con la tabla "ruta_ubicacion"
+    public function rutaUbicaciones()
+    {
+        return $this->hasMany(RutaUbicacion::class, 'ubicacion_id');
     }
 }

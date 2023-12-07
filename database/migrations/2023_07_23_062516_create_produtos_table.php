@@ -13,19 +13,19 @@ return new class extends Migration
     {
         Schema::create('productos', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('nombre',150);
+            $table->string('nombre_producto');
             $table->string('descripcion');
-            $table->decimal('precio',8,2);
+            $table->decimal('precio', 8, 2);
             $table->integer('stock');
-            $table->string('estado');
+            $table->string('estado_producto');
             $table->string('unidad_medida');
 
             $table->unsignedBigInteger('grupo_id');
             $table->foreign('grupo_id')->references('id')->on('grupos')->onDelete('cascade');
             $table->unsignedBigInteger('familia_id');
             $table->foreign('familia_id')->references('id')->on('familias')->onDelete('cascade');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            // $table->unsignedBigInteger('user_id');
+            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

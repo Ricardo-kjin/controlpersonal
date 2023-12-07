@@ -9,13 +9,27 @@ class Producto extends Model
 {
     use HasFactory;
 
-    public function grupo(){
-        return $this->belongsTo(Grupo::class);
+    protected $fillable = [
+        'nombre_producto', 'descripcion', 'precio', 'stock', 'estado_producto', 'unidad_medida', 'familia_id', 'grupo_id'
+    ];
+
+    // Relación con la tabla "familias"
+    public function familia()
+    {
+        return $this->belongsTo(Familia::class, 'familia_id');
     }
-    public function familia(){
-        return $this->belongsTo(Familia::class);
+
+    // Relación con la tabla "grupos"
+    public function grupo()
+    {
+        return $this->belongsTo(Grupo::class, 'grupo_id');
     }
     public function user(){
         return $this->belongsTo(User::class);
+    }
+    // Relación con la tabla "subgrupos"
+    public function subgrupo()
+    {
+        return $this->belongsTo(Subgrupo::class, 'subgrupo_id');
     }
 }

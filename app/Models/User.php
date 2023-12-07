@@ -54,14 +54,14 @@ class User extends Authenticatable
     public function scopeDesarrolladoresXAdmin($query,$id){
         return $query->where('role','desarrollador')->where('admin_id','=',$id);
     }
-    public function scopeVendedorsXAdmin($query,$id){
-        return $query->where('role','vendedor')->where('admin_id','=',$id);
+    public function scopeVendedorsXAdmin($query){
+        return $query->where('role','vendedor');
     }
     public function scopeMonitorsXAdmin($query,$id){
-        return $query->where('role','monitor')->where('admin_id','=',$id);
+        return $query->where('role','personal')->where('admin_id','=',$id);
     }
-    public function scopeClientesXAdmin($query,$id){
-        return $query->where('role','cliente')->where('admin_id','=',$id);
+    public function scopeClientesXAdmin($query){
+        return $query->where('role','cliente');
     }
 
     public function salas(){
@@ -71,10 +71,6 @@ class User extends Authenticatable
          return $this->hasMany(Sala::class);
     }
 
-    public function productos(){
-        return $this->hasMany(Producto::class);
-    }
-
     public function ubicacion(){
         return $this->hasOne(Ubicacion::class);
     }
@@ -82,4 +78,39 @@ class User extends Authenticatable
     public function rutas(){
         return $this->hasMany(Ruta::class);
     }
+    //AGREGADO
+
+
+        // Relación con la tabla "ingresos"
+        public function ingresos()
+        {
+            return $this->hasMany(Ingreso::class, 'user_id');
+        }
+
+        // Relación con la tabla "movimientos"
+        public function movimientos()
+        {
+            return $this->hasMany(Movimiento::class, 'user_id');
+        }
+
+        // Relación con la tabla "ruta_ubicacion"
+        // public function ubicaciones()
+        // {
+        //     return $this->hasMany(Ubicacion::class, 'user_id');
+        // }
+
+        // Relación con la tabla "ventas"
+        public function ventas()
+        {
+            return $this->hasMany(Venta::class, 'user_id');
+        }
+
+        // Otras relaciones con las demás tablas...
+
+        // Relación con la tabla "ubicacions" a través de la tabla "ruta_ubicacion"
+        public function ubicacionesRutas()
+        {
+            return $this->hasManyThrough(Ubicacion::class, RutaUbicacion::class, 'user_id', 'id', 'id', 'ubicacion_id');
+        }
+
 }

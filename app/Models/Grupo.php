@@ -9,10 +9,20 @@ class Grupo extends Model
 {
     use HasFactory;
 
-    public function subgrupos(){
+    protected $fillable = [
+        'nombre_grupo'
+    ];
+
+    // Relación con la tabla "productos"
+    public function productos()
+    {
+        return $this->hasMany(Producto::class, 'grupo_id');
+    }
+
+    // Relación con la tabla "subgrupos"
+    public function subgrupos()
+    {
         return $this->hasMany(Subgrupo::class, 'grupo_id');
     }
-    public function productos(){
-        return $this->hasMany(Producto::class);
-    }
+
 }
