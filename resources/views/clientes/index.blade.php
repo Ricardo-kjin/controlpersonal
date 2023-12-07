@@ -52,7 +52,7 @@
                             {{$cliente->role}}
                         </td>
                         <td>
-                            @if ($cliente->ubicacion)
+                            @if ($cliente->ubicacions->first())
                                 Ubicacion Registrada <br> <a href="{{url('/ubicaciones/'.$cliente->id.'/edit')}}">Editar</a>
                             @else
                                 <a title="Añadir una Ubicación" href="{{url('/ubicaciones/'.$cliente->id)}}">Registrar Ubicacion</a>

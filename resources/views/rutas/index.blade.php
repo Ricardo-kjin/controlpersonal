@@ -44,7 +44,7 @@
                             {{$ruta->codigo_ruta}}
                         </th>
                         <th scope="row">
-                            {{$ruta->estado}}
+                            {{$ruta->estado_ruta}}
                         </th>
                         <th scope="row">
                             {{$ruta->tiempo_total}}

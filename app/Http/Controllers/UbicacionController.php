@@ -47,7 +47,7 @@ class UbicacionController extends Controller
         $ubicacion->latitud= $request->input('latitud');
         $ubicacion->longitud= $request->input('longitud');
         $ubicacion->url_map= $request->input('url_map');
-        $ubicacion->estado= "Activo";
+        $ubicacion->estado_ubicacion= "Activo";
         $ubicacion->user_id= $request->input('user_id');
         // dd($ubicacion);
         // dd($ubicacion,$request);
@@ -70,7 +70,7 @@ class UbicacionController extends Controller
      */
     public function edit(string $user_id)
     {
-        $ubicacion=User::find($user_id)->ubicacion()->first();
+        $ubicacion=User::find($user_id)->ubicacions()->first();
         // dd($ubicacion);
         return view('ubicaciones.edit',compact('ubicacion'));
     }
@@ -142,7 +142,7 @@ class UbicacionController extends Controller
         $ubicacion->latitud= $request->input('latitud');
         $ubicacion->longitud= $request->input('longitud');
         $ubicacion->url_map= $request->input('url_map');
-        $ubicacion->estado= "Activo";
+        $ubicacion->estado_ubicacion= "Activo";
         $ubicacion->user_id= $request->input('user_id');
         // dd($ubicacion);
         // dd($ubicacion,$request);
@@ -154,7 +154,7 @@ class UbicacionController extends Controller
 
     public function editv(string $user_id)
     {
-        $ubicacion=User::find($user_id)->ubicacion()->first();
+        $ubicacion=User::find($user_id)->ubicacions()->first();
         // dd($ubicacion);
         return view('ubicaciones.editv',compact('ubicacion'));
     }

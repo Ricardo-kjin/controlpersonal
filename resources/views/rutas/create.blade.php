@@ -37,6 +37,17 @@
                         required>
                 </div>
                 <div class="form-group">
+
+                    <div class="input-group input-group-static mb-4">
+                        <label for="vendedor" class="ms-0">Seleccione un vendedor</label>
+                        <select class="form-control" name="vendedor" id="vendedor">
+                            @foreach ($vendedors as $vendedor)
+                                <option value="{{ $vendedor->id }}"> {{ $vendedor->name }}</option>
+                            @endforeach
+                        </select>
+                      </div>
+                </div>
+                {{-- <div class="form-group">
                     <label for="vendedor">Vendedores</label>
                     <select name="vendedor" id="vendedor" class="form-control selectpicker" data-style="btn-primary"
                         title="Seleccionar vendedor" required>
@@ -44,7 +55,7 @@
                             <option value="{{ $vendedor->id }}"> {{ $vendedor->name }}</option>
                         @endforeach
                     </select>
-                </div>
+                </div> --}}
                 {{-- <div class="form-group">
                     <label for="familia">familia</label>
                     <select name="familia" id="familia" class="form-control selectpicker" data-style="btn-primary"
@@ -82,8 +93,8 @@
                                             <option value="{{ $habitacion->id }}">{{ $habitacion->nombre }}</option>
                                         @endforeach
                                     </select> --}}
-                                    {{$cliente->ubicacion()->first()->latitud}} -
-                                    {{$cliente->ubicacion()->first()->longitud}}
+                                    {{$cliente->ubicacions()->first()->latitud}} -
+                                    {{$cliente->ubicacions()->first()->longitud}}
                                 </td>
                                 <td><input type="date" name="fechas[{{ $cliente->id }}][inicio]"></td>
                                 <td><input type="date" name="fechas[{{ $cliente->id }}][fin]"></td>

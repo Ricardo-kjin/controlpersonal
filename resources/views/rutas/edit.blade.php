@@ -75,7 +75,7 @@
                                     {{ $cliente->name }}
                                 </td>
                                 <td>
-                                    <input type="checkbox" name="seleccionados[]" value="{{ $cliente->id }}" @if($ruta->ubicacions()->exists($cliente->ubicacion->id)) checked @endif>
+                                    <input type="checkbox" name="seleccionados[]" value="{{ $cliente->id }}" @if($ruta->ubicacions()->exists($cliente->ubicacions->first()->id)) checked @endif>
                                 </td>
                                 <td>
                                     {{-- <select name="rutas_ubicaciones[{{ $cliente->id }}][habitaciones][]" multiple required>
@@ -83,8 +83,8 @@
                                             <option value="{{ $habitacion->id }}">{{ $habitacion->nombre }}</option>
                                         @endforeach
                                     </select> --}}
-                                    {{$cliente->ubicacion()->first()->latitud}} -
-                                    {{$cliente->ubicacion()->first()->longitud}}
+                                    {{$cliente->ubicacions->first()->latitud}} -
+                                    {{$cliente->ubicacions->first()->longitud}}
                                 </td>
                                 <td>
                                     <input type="date" name="fechas[{{ $cliente->id }}][inicio]"  value="{{  $ruta->ubicacions->where('user_id',$cliente->id)->first()->pivot->fecha_ini }}">
@@ -108,8 +108,8 @@
                                             <option value="{{ $habitacion->id }}">{{ $habitacion->nombre }}</option>
                                         @endforeach
                                     </select> --}}
-                                    {{$cliente->ubicacion()->first()->latitud}} -
-                                    {{$cliente->ubicacion()->first()->longitud}}
+                                    {{$cliente->ubicacions->first()->latitud}} -
+                                    {{$cliente->ubicacions->first()->longitud}}
                                 </td>
                                 <td>
                                     <input type="date" name="fechas[{{ $cliente->id }}][inicio]" >

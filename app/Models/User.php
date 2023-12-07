@@ -71,9 +71,11 @@ class User extends Authenticatable
          return $this->hasMany(Sala::class);
     }
 
-    public function ubicacion(){
-        return $this->hasOne(Ubicacion::class);
+    public function ubicacions()
+    {
+        return $this->hasMany(Ubicacion::class);
     }
+
 
     public function rutas(){
         return $this->hasMany(Ruta::class);

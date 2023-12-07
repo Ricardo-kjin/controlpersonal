@@ -18,14 +18,14 @@ class DetalleVenta extends Model
     ];
 
     // Relación con Productos
-    public function producto()
-    {
-        return $this->belongsTo(Producto::class, 'producto_id');
-    }
+    // public function producto()
+    // {
+    //     return $this->belongsTo(Producto::class, 'producto_id');
+    // }
 
-    // Relación con Ventas
-    public function venta()
-    {
-        return $this->belongsTo(Venta::class, 'venta_id');
-    }
+    // // Relación con Ventas
+    // public function venta()
+    // {
+    //     return $this->belongsTo(Venta::class, 'venta_id');
+    // }
 }

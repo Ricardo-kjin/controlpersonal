@@ -14,14 +14,14 @@ class RutaUbicacion extends Model
     ];
 
     // Relación con la tabla "ubicacions"
-    public function ubicacion()
-    {
-        return $this->belongsTo(Ubicacion::class, 'ubicacion_id');
-    }
+    // public function ubicacion()
+    // {
+    //     return $this->belongsTo(Ubicacion::class, 'ubicacion_id');
+    // }
 
-    // Relación con la tabla "rutas"
-    public function ruta()
-    {
-        return $this->belongsTo(Ruta::class, 'ruta_id');
-    }
+    // // Relación con la tabla "rutas"
+    // public function ruta()
+    // {
+    //     return $this->belongsTo(Ruta::class, 'ruta_id');
+    // }
 }

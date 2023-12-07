@@ -17,8 +17,7 @@ return new class extends Migration
             $table->decimal('monto',10,2);
             $table->unsignedBigInteger('cuenta_id');
             $table->foreign('cuenta_id')->references('id')->on('cuentas')->onDelete('cascade');
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

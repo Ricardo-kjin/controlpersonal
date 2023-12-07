@@ -30,12 +30,17 @@ class RutaController extends Controller
     public function create()
     {
         $users = User::all();
-        $vendedors = User::vendedorsXAdmin(auth()->user()->id)->orderBy('id', 'asc')->get();
+        // dd($users);
+        $vendedors = User::vendedorsXAdmin()->orderBy('id', 'asc')->get();
+        // dd($vendedors);
         //clientes que tengan una ubicacion
-        // $clientes=User::clientesXAdmin(auth()->user()->id)->has('ubicacion')->orderBy('id','asc')->get();
-        $clientes = User::clientesXAdmin(auth()->user()->id)->whereHas('ubicacion', function ($query) {
-            $query->whereDoesntHave('rutas');
+        // $clientes = User::clientesXAdmin()->with('ubicacions.rutas')->get();;
+        $clientes = User::clientesXAdmin()->whereHas('ubicacions', function ($query) {
+            $query->doesntHave('rutas');
         })->get();
+
+
+        // dd($clientes);
         // dd($vendedors);
         return view('rutas.create', compact('users', 'vendedors', 'clientes'));
     }
@@ -56,11 +61,11 @@ class RutaController extends Controller
 
         $this->validate($request, $rules, $messages);
 
-
+        // dd($request->input('vendedor'));
         $ruta = new Ruta();
         $ruta->codigo_ruta = $request->input('codigo_ruta');
         $ruta->tiempo_total = 0;
-        $ruta->estado = "Pendiente";
+        $ruta->estado_ruta = "Pendiente";
         $ruta->user_id = $request->input('vendedor');
 
         $ruta->save();
@@ -71,13 +76,13 @@ class RutaController extends Controller
 
         foreach ($clientesSeleccionados as $cliente_id) {
             $fechas = $request->input('fechas.' . $cliente_id);
-            $cliente = User::clientesXAdmin(auth()->user()->id)->findOrFail($cliente_id);
-
+            $cliente = User::clientesXAdmin()->findOrFail($cliente_id);
+            // dd($cliente->ubicacions->first()->id);
             // Aquí puedes realizar validaciones adicionales si es necesario
             // ...
 
             // Guardar en la tabla pivote
-            $ruta->ubicacions()->attach($cliente->ubicacion->id, [
+            $ruta->ubicacions()->attach($cliente->ubicacions->first()->id, [
                 'fecha_ini' => $fechas['inicio'],
                 'fecha_fin' => $fechas['fin'],
                 'estado_visita' => "Pendiente",
@@ -117,26 +122,29 @@ class RutaController extends Controller
         $rutaId=$routeId;
         ///////////////////ESTA PARTE DE PRUEBA COMPLETA
 
-        $clientesEnRuta = User::whereHas('ubicacion.rutas', function ($query) use ($rutaId) {
+        $clientesEnRuta = User::whereHas('ubicacions.rutas', function ($query) use ($rutaId) {
                 $query->where('ruta_id', $rutaId);
-            })->with(['ubicacion.rutas' => function ($query) use ($rutaId) {
+            })->with(['ubicacions.rutas' => function ($query) use ($rutaId) {
                 $query->where('ruta_id', $rutaId)->withPivot('id', 'fecha_ini', 'fecha_fin', 'estado_visita');
             }])->get();
             // dd($clientesEnRuta1);
         $clientesEnRuta1 = User::where('role', 'cliente')
-            ->whereHas('ubicacion', function ($query) use ($routeId) {
+            ->whereHas('ubicacions', function ($query) use ($routeId) {
                 $query->whereHas('rutas', function ($query) use ($routeId) {
                     $query->where('ruta_id', $routeId);
                 });
             })
             ->get();
 
-        $clientesSinRuta = User::where('role', 'cliente')
-            ->whereDoesntHave('ubicacion', function ($query) {
-                $query->whereHas('rutas');
-            })
-            ->get();
-            // dd($clientesEnRuta,$clientesSinRuta);
+        // $clientesSinRuta = User::where('role', 'cliente')
+        //     ->whereDoesntHave('ubicacions', function ($query) {
+        //         $query->whereHas('rutas');
+        //     })
+            // ->get();
+            $clientesSinRuta = User::where('role', 'cliente')
+            ->whereHas('ubicacions', function ($query) {$query->whereDoesntHave('rutas');})  ->get();
+            // dd($clientesConUbicacionSinRuta);
+
         return view('rutas.edit', compact('ruta', 'clientesEnRuta', 'clientesSinRuta', 'vendedors'));
     }
 
@@ -161,7 +169,7 @@ class RutaController extends Controller
         // $ruta = new Ruta();
         $ruta->codigo_ruta = $request->input('codigo_ruta');
         $ruta->tiempo_total = 0;
-        $ruta->estado = "Pendiente";
+        $ruta->estado_ruta = "Pendiente";
         $ruta->user_id = $request->input('vendedor');
 
         // $ruta->save();

@@ -152,7 +152,7 @@
                                       </td>
                                       <td class="align-middle text-sm">
                                           <span class="text-xs font-weight-bold mb-0 ">
-                                            @if ($vendedor->ubicacion)
+                                            @if ($vendedor->ubicacions->first())
                                               Ubicacion Registrada <br>
                                               <a href="{{ url('/ubicaciones/vendedores/' . $vendedor->id . '/edit') }}">Editar Ubicacions</a>
                                             @else

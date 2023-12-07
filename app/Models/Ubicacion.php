@@ -10,7 +10,7 @@ class Ubicacion extends Model
     use HasFactory;
 
     protected $fillable = [
-        'longitud', 'latitud', 'url_map', 'estado_ubicacion', 'user_id'
+        'longitud', 'latitud', 'url_map','estado_ubicacion', 'user_id'
     ];
 
     // Relación con la tabla "users"
@@ -19,9 +19,9 @@ class Ubicacion extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // Relación con la tabla "ruta_ubicacion"
-    public function rutaUbicaciones()
+    // En el modelo Ubicacion
+    public function rutas()
     {
-        return $this->hasMany(RutaUbicacion::class, 'ubicacion_id');
+        return $this->belongsToMany(Ruta::class);
     }
 }

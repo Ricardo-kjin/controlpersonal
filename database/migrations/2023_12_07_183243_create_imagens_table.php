@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cuentas', function (Blueprint $table) {
+        Schema::create('imagens', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->decimal('saldo', 10, 2);
-            $table->string('estado_cuenta');
-            $table->unsignedBigInteger('user_id');
+            $table->text('url_imagen')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
@@ -26,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('cuentas');
+        Schema::dropIfExists('imagens');
     }
 };

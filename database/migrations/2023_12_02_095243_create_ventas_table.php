@@ -18,6 +18,8 @@ return new class extends Migration
             $table->decimal('total_venta', 10, 2);
             $table->unsignedBigInteger('tipopago_id');
             $table->foreign('tipopago_id')->references('id')->on('tipo_pagos')->onDelete('cascade');
+            $table->unsignedBigInteger('promocion_id');
+            $table->foreign('promocion_id')->references('id')->on('promocions')->onDelete('cascade');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
