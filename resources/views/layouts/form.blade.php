@@ -6,6 +6,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <link rel="apple-touch-icon" sizes="76x76" href="{{asset('img/apple-icon.png')}}">
   <link rel="icon" type="image/png" href="{{asset('img/favicon.png')}}">
   <title>
@@ -37,12 +38,12 @@
 
             <div class="collapse navbar-collapse" id="navigation">
               <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
+                {{-- <li class="nav-item">
                   <a class="nav-link me-2" href="{{route('register')}}">
                     <i class="fas fa-user-circle opacity-6 text-dark me-1"></i>
                     Regístrate
                   </a>
-                </li>
+                </li> --}}
                 <li class="nav-item">
                   <a class="nav-link me-2" href="{{route('login')}}">
                     <i class="fas fa-key opacity-6 text-dark me-1"></i>
