@@ -107,7 +107,7 @@ Route::get('/mapa', [App\Http\Controllers\MapaController::class, 'mostrarMapa'])
 Route::get('/reportesprom', [App\Http\Controllers\ReportesController::class, 'reportesprom']);
 
 //imagenes
-Route::get('/imagenes/create', [App\Http\Controllers\ImagenController::class, 'create']);
+Route::get('/imagenes/create/{id}', [App\Http\Controllers\ImagenController::class, 'create']);
 Route::post('/imagenes', [App\Http\Controllers\ImagenController::class, 'store']);
 
 Route::get('/captura', [App\Http\Controllers\ImagenController::class, 'mostrarCaptura'])->name('mostrarCaptura');

@@ -21,9 +21,10 @@ class ImagenController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(string $id)
     {
-        $imagen = Imagen::where('user_id',auth()->user()->id)->first();
+        // dd($id);
+        $imagen = Imagen::where('user_id',$id)->first();
         // dd($imagen);
         // dd($imagen);
         return view('imagenes.create', compact('imagen'));
