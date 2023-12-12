@@ -103,10 +103,68 @@
             </div>
         </div>
         <!-- Footer-->
+        <!-- Modal -->
+        <div class="modal fade" id="terminosModal" tabindex="-1" aria-labelledby="terminosModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="terminosModalLabel">Términos y Condiciones de uso:</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>
+                            Bienvenido a DevTop. Al utilizar nuestros servicios, aceptas los siguientes términos y condiciones.
+                        </p>
+                        <p>
+                            1. Aceptas ser totalmente responsable de tu propio contenido.
+                        </p>
+                        <p>
+                            2. Aseguras que toda la información proporcionada es precisa.
+                        </p>
+                        <p>
+                            3. Aceptas no utilizar nuestros servicios para fines ilegales o no autorizados.
+                        </p>
+                        <!-- Agrega más términos y condiciones según sea necesario -->
 
+                        <!-- Checkbox para aceptar los términos y condiciones -->
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="aceptoTerminos">
+                            <label class="form-check-label" for="aceptoTerminos">
+                                Acepto los términos y condiciones
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" id="btnAceptar" disabled>Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="{{asset('js/scripts.js')}}"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var myModal = new bootstrap.Modal(document.getElementById('terminosModal'), {
+                    backdrop: 'static', // Evita el cierre haciendo clic fuera del modal
+                    keyboard: false      // Evita el cierre al presionar la tecla Escape
+                });
+
+                // Habilita el botón de Aceptar cuando el checkbox está marcado
+                document.getElementById('aceptoTerminos').addEventListener('change', function() {
+                    document.getElementById('btnAceptar').disabled = !this.checked;
+                });
+
+                // Cierra el modal y realiza acciones adicionales al hacer clic en "Aceptar"
+                document.getElementById('btnAceptar').addEventListener('click', function() {
+                    myModal.hide(); // Cierra el modal
+                    // Puedes agregar aquí cualquier acción adicional después de aceptar los términos
+                });
+
+                // Muestra el modal al cargar la página
+                myModal.show();
+            });
+        </script>
     </body>
 </html>
