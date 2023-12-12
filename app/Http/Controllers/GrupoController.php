@@ -40,7 +40,7 @@ class GrupoController extends Controller
 
         $this->validate($request,$rules,$messages);
         $grupo= new Grupo();
-        $grupo->nombre= $request->input('nombre');
+        $grupo->nombre_grupo= $request->input('nombre');
         $grupo->save();
         $notification='La grupo ha sido creada correctamente';
 
@@ -79,7 +79,7 @@ class GrupoController extends Controller
 
         $this->validate($request,$rules,$messages);
 
-        $grupo->nombre= $request->input('nombre');
+        $grupo->nombre_grupo= $request->input('nombre');
         $grupo->save();
         $notification='La grupo se ha actualizado correctamente';
 

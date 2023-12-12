@@ -6,78 +6,99 @@
 @endsection
 
 @section('content')
-    <div class="card shadow">
-        <div class="card-header border-0">
-            <div class="row align-items-center">
-                <div class="col">
-                    <h3 class="mb-0">Nueva producto</h3>
+    <div class="row">
+        <div class="col-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-info shadow-info border-radius-lg pt-4 pb-3">
+                        <h6 class="text-white text-capitalize ps-3">NUEVO PRODUCTO</h6>
+                    </div>
                 </div>
-                <div class="col text-right">
-                    <a href="{{ url('/productos') }}" class="btn btn-sm btn-success">
-                        <i class="fas fa-chevron-left"></i>
-                        Regresar
-                    </a>
+                <div class="card-body">
+                    @if ($errors->any())
+                        @foreach ($errors->all() as $error)
+                            <div class="alert alert-danger alert-dismissible text-white fade show" role="alert">
+                                <span class="alert-icon align-middle">
+                                    <span class="material-icons text-md">
+                                        warning
+                                    </span>
+                                </span>
+                                <span class="alert-text"><strong>Por favor!!</strong> {{ $error }}</span>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endforeach
+                    @else
+                    @endif
+                    <form method="POST" action="{{ url('/productos') }}">
+                        @csrf
+                        <div class="form-control">
+                            <div class="input-group input-group-dynamic mb-1">
+                                <label for="nombre" class="form-label">NOMBRE DEL PRODUCTO</label>
+                                <input type="text" name="nombre" class="form-control" value="{{ old('nombre') }}"
+                                    id="nombre" required>
+                            </div>
+                        </div>
+                        <div class="form-control">
+                            <div class="input-group input-group-dynamic mb-1">
+                                <label for="descripcion" class="form-label">DESCRIPCION</label>
+                                <input type="text" name="descripcion" class="form-control" value="{{ old('descripcion') }}"
+                                    id="descripcion" required>
+                            </div>
+                        </div>
+                        <div class="form-control">
+                            <div class="input-group input-group-dynamic mb-1">
+                                <label for="precio" class="form-label">PRECIO DEL PRODUCTO</label>
+                                <input type="text" name="precio" class="form-control" value="{{ old('precio') }}"
+                                    id="precio" required>
+                            </div>
+                        </div>
+                        <div class="form-control">
+                            <div class="input-group input-group-dynamic mb-1">
+                                <label for="stock" class="form-label">STOCK DEL PRODUCTO</label>
+                                <input type="text" name="stock" class="form-control" value="{{ old('stock') }}"
+                                    id="stock" required>
+                            </div>
+                        </div>
+                        <div class="form-control">
+                            <div class="input-group input-group-dynamic mb-1">
+                                <label for="unidad_medida" class="form-label">UNIDAD DE MEDIDA DEL PRODUCTO</label>
+                                <input type="text" name="unidad_medida" class="form-control" value="{{ old('unidad_medida') }}"
+                                    id="unidad_medida" required>
+                            </div>
+                        </div>
+                        <div class="form-control">
+                            <div class="input-group input-group-static mb-1">
+                                <label for="grupo" class="ms-0">GRUPO DEL PRODUCTO</label>
+                                <select class="form-control" id="grupo" name="grupo">
+                                    @foreach ($grupos as $grupo)
+                                        <option value="{{ $grupo->id }}"> {{ $grupo->nombre_grupo }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-control">
+                            <div class="input-group input-group-static mb-1">
+                                <label for="familia" class="ms-0">FAMILIA DEL PRODUCTO</label>
+                                <select class="form-control" id="familia" name="familia">
+                                    @foreach ($familias as $familia)
+                                        <option value="{{ $familia->id }}"> {{ $familia->nombre_familia }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="submit" class="btn bg-gradient-primary">Guardar</button>
+                            <a href="{{ url('/productos') }}" type="button" class="btn btn-outline-success"
+                                title="Regresar"><i class="material-icons">arrow_back</i> Regresar</a>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <div class="card-body">
-            @if ($errors->any())
-                @foreach ($errors->all() as $error)
-                    <div class="alert alert-danger" role="alert">
-                        <i class="fas fa-exclamation-triangle"></i>
-                        <strong>Por favor!</strong> {{ $error }}
-                    </div>
-                @endforeach
-            @endif
-            <form action="{{ url('/productos') }}" method="POST">
-                @csrf
-                <div class="form-group">
-                    <label for="nombre">Nombre del producto</label>
-                    <input type="text" name="nombre" class="form-control" value="{{ old('nombre') }}" id="nombre"
-                        required>
-                </div>
-                <div class="form-group">
-                    <label for="description">Descripción del producto</label>
-                    <input type="text" name="description" class="form-control" id="description"
-                        value="{{ old('description') }}">
-                </div>
-                <div class="form-group">
-                    <label for="stock">Stock</label>
-                    <input type="number" name="stock" class="form-control" id="stock"
-                        value="{{ old('stock') }}">
-                </div>
-                <div class="form-group">
-                    <label for="precio">Precio</label>
-                    <input type="number" step="any" name="precio" class="form-control" id="precio"
-                        value="{{ old('precio') }}">
-                </div>
-                <div class="form-group">
-                    <label for="unidad_medida">Unidad de Medida</label>
-                    <input type="text" name="unidad_medida" class="form-control" id="unidad_medida"
-                        value="{{ old('unidad_medida') }}">
-                </div>
-                <div class="form-group">
-                    <label for="grupo">Grupo</label>
-                    <select name="grupo" id="grupo" class="form-control selectpicker" data-style="btn-primary"
-                        title="Seleccionar Grupo" required>
-                        @foreach ($grupos as $grupo)
-                            <option value="{{ $grupo->id }}"> {{ $grupo->nombre }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="familia">familia</label>
-                    <select name="familia" id="familia" class="form-control selectpicker" data-style="btn-primary"
-                        title="Seleccionar familia" required>
-                        @foreach ($familias as $familia)
-                            <option value="{{ $familia->id }}"> {{ $familia->nombre }}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-primary"> Crear producto</button>
-            </form>
-        </div>
     </div>
+
 @endsection
 @section('scripts')
     <!-- Latest compiled and minified JavaScript -->

@@ -57,7 +57,7 @@
                                           </div>
                                       </td>
                                       <td class="align-middle text-sm">
-                                          <p class="text-xs font-weight-bold mb-0 ">{{ $grupo->nombre }}</p>
+                                          <p class="text-xs font-weight-bold mb-0 ">{{ $grupo->nombre_grupo }}</p>
                                           {{-- <p class="text-xs text-secondary mb-0">Organization</p> --}}
                                       </td>
                                       <td class="align-middle">

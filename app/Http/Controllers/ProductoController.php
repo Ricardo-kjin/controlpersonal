@@ -25,6 +25,7 @@ class ProductoController extends Controller
     {
         $grupos=Grupo::orderBy('id','asc')->get();
         $familias=Familia::orderBy('id','asc')->get();
+        // dd($familias->pluck('id'));
         return view('productos.create',compact('grupos','familias'));
     }
 
@@ -49,15 +50,15 @@ class ProductoController extends Controller
 
         $this->validate($request,$rules,$messages);
         $producto= new Producto();
-        $producto->nombre= $request->input('nombre');
-        $producto->descripcion= $request->input('description');
+        $producto->nombre_producto= $request->input('nombre');
+        $producto->descripcion= $request->input('descripcion');
         $producto->stock= $request->input('stock');
         $producto->precio= $request->input('precio');
         $producto->unidad_medida= $request->input('unidad_medida');
-        $producto->estado= "Activo";
+        $producto->estado_producto= "Activo";
         $producto->grupo_id= $request->input('grupo');
         $producto->familia_id= $request->input('familia');
-        $producto->user_id= auth()->user()->id;
+        // $producto->user_id= auth()->user()->id;
         // dd($producto);
         $producto->save();
         $notification='El producto ha sido creada correctamente';

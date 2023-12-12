@@ -13,7 +13,7 @@ class VermapController extends Controller
 
     public function index()
     {
-        $vendedors = User::vendedorsXAdmin(auth()->user()->id)->has('ubicacion')->paginate(10);
+        $vendedors = User::vendedorsXAdmin(auth()->user()->id)->has('ubicacions')->paginate(10);
         // dd($vendedors);
         return view('tiemporeals.index', compact('vendedors'));
     }

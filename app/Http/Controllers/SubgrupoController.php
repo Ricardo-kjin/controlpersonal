@@ -14,6 +14,7 @@ class SubgrupoController extends Controller
     public function index()
     {
         $subgrupos=Subgrupo::orderBy('id','asc')->get();
+        // dd($subgrupos);
         return view('subgrupos.index',compact('subgrupos'));
     }
 
@@ -43,8 +44,8 @@ class SubgrupoController extends Controller
 
         $this->validate($request,$rules,$messages);
         $subgrupo= new Subgrupo();
-        $subgrupo->nombre= $request->input('nombre');
-        $subgrupo->descripcion= $request->input('description');
+        $subgrupo->nombre_subgrupo= $request->input('nombre');
+        $subgrupo->descripcion= $request->input('descripcion');
         $subgrupo->grupo_id= $request->input('grupo');
         // dd($subgrupo);
         $subgrupo->save();
@@ -68,7 +69,7 @@ class SubgrupoController extends Controller
     {
         // dd($subgrupo);
         $grupos=Grupo::orderBy('id','asc')->get();
-
+        // dd($grupos);
         return view('subgrupos.edit', compact('subgrupo','grupos'));
     }
 
@@ -77,6 +78,7 @@ class SubgrupoController extends Controller
      */
     public function update(Request $request, Subgrupo $subgrupo)
     {
+        // dd($subgrupo);
         $rules=[
             'nombre'=>'required|min:3',
         ];
@@ -88,8 +90,8 @@ class SubgrupoController extends Controller
 
         $this->validate($request,$rules,$messages);
 
-        $subgrupo->nombre= $request->input('nombre');
-        $subgrupo->descripcion= $request->input('description');
+        $subgrupo->nombre_subgrupo= $request->input('nombre');
+        $subgrupo->descripcion= $request->input('descripcion');
         $subgrupo->grupo_id= $request->input('grupo');
         // dd($subgrupo);
         $subgrupo->save();

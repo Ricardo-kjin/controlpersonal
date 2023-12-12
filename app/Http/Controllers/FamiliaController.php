@@ -40,7 +40,7 @@ class FamiliaController extends Controller
 
         $this->validate($request,$rules,$messages);
         $familia= new Familia();
-        $familia->nombre= $request->input('nombre');
+        $familia->nombre_familia= $request->input('nombre');
         $familia->save();
         $notification='La Familia ha sido creada correctamente';
 
@@ -81,7 +81,7 @@ class FamiliaController extends Controller
 
         $this->validate($request,$rules,$messages);
 
-        $familia->nombre= $request->input('nombre');
+        $familia->nombre_familia= $request->input('nombre');
         $familia->save();
         $notification='La familia se ha actualizado correctamente';
 

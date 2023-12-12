@@ -113,6 +113,46 @@ Route::post('/imagenes', [App\Http\Controllers\ImagenController::class, 'store']
 Route::get('/captura', [App\Http\Controllers\ImagenController::class, 'mostrarCaptura'])->name('mostrarCaptura');
 Route::post('/captura/procesar', [App\Http\Controllers\ImagenController::class, 'procesarCaptura'])->name('procesarCaptura');
 
+//Promociones
+Route::get('/promociones', [App\Http\Controllers\PromocionController::class, 'index']);
+Route::get('/promociones/create', [App\Http\Controllers\PromocionController::class, 'create']);
+Route::get('/promociones/{grupo}/edit', [App\Http\Controllers\PromocionController::class, 'edit']);
+Route::post('/promociones', [App\Http\Controllers\PromocionController::class, 'store']);
+Route::put('/promociones/{grupo}', [App\Http\Controllers\PromocionController::class, 'update']);
+Route::delete('/promociones/{grupo}', [App\Http\Controllers\PromocionController::class, 'destroy']);
+
+//tipo de pago
+Route::get('/tipopagos', [App\Http\Controllers\TipoPagoController::class, 'index']);
+Route::get('/tipopagos/create', [App\Http\Controllers\TipoPagoController::class, 'create']);
+Route::get('/tipopagos/{tipopago}/edit', [App\Http\Controllers\TipoPagoController::class, 'edit']);
+Route::post('/tipopagos', [App\Http\Controllers\TipoPagoController::class, 'store']);
+Route::put('/tipopagos/{tipopago}', [App\Http\Controllers\TipoPagoController::class, 'update']);
+Route::delete('/tipopagos/{tipopago}', [App\Http\Controllers\TipoPagoController::class, 'destroy']);
+
+//VENTAS
+Route::get('/ventas', [App\Http\Controllers\VentaController::class, 'index']);
+Route::get('/ventas/create', [App\Http\Controllers\VentaController::class, 'create']);
+// Route::get('/ventas/{venta}/edit', [App\Http\Controllers\VentaController::class, 'edit']);
+Route::post('/ventas', [App\Http\Controllers\VentaController::class, 'store']);
+// Route::put('/ventas/{venta}', [App\Http\Controllers\VentaController::class, 'update']);
+Route::delete('/ventas/{venta}', [App\Http\Controllers\VentaController::class, 'destroy']);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //salas
 // Route::get('/salas', [App\Http\Controllers\SalasController::class, 'index']);

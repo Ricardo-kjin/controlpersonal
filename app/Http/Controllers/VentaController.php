@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Producto;
+use App\Models\Promocion;
+use App\Models\TipoPago;
+use App\Models\User;
 use App\Models\Venta;
 use Illuminate\Http\Request;
 
@@ -12,7 +16,8 @@ class VentaController extends Controller
      */
     public function index()
     {
-        //
+        $ventas=Venta::all();
+        return view('ventas.index',compact('ventas'));
     }
 
     /**
@@ -20,7 +25,12 @@ class VentaController extends Controller
      */
     public function create()
     {
-        //
+        $clientes=User::where('role','cliente')->get();
+        $tipopagos=TipoPago::all();
+        $promociones=Promocion::all();
+        $productos=Producto::all();
+        // dd($clientes);
+        return view('ventas.create',compact('clientes','tipopagos','promociones','productos'));
     }
 
     /**
@@ -28,7 +38,7 @@ class VentaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**

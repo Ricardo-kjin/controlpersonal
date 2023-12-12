@@ -1,6 +1,6 @@
 <ul class="navbar-nav">
 
-    {{-- Gestion personal --}}
+    {{-- Gestion Usuarios --}}
     <li class="nav-item">
         <a class="nav-link text-white" data-bs-toggle="collapse" href="#gruposMenu" role="button" aria-expanded="false">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -21,18 +21,19 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="{{ url('/vendedores') }}">
+                    <a class="nav-link text-white" href="{{ url('/clientes') }}">
                         <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                             {{-- <i class="material-icons opacity-10">group_work</i> --}}
                             <i class="fas fa-user-cog"></i>
                         </div>
-                        <span class="nav-link-text ms-1">Supervisores</span>
+                        <span class="nav-link-text ms-1">Clientes</span>
                     </a>
                 </li>
             </ul>
         </div>
     </li>
-    <li class="nav-item">
+    {{-- Control de clientes --}}
+    <li class="nav-item" hidden>
         <a class="nav-link text-white" data-bs-toggle="collapse" href="#gestionclientes" role="button"
             aria-expanded="false">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -115,8 +116,57 @@
                     </a>
                 </li>
             </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url('/promociones') }}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            {{-- <i class="material-icons opacity-10">person_outline</i> --}}
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Promociones</span>
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="{{ url('/tipopagos') }}">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            {{-- <i class="material-icons opacity-10">person_outline</i> --}}
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <span class="nav-link-text ms-1">Tipo de Pago</span>
+                    </a>
+                </li>
+            </ul>
         </div>
     </li>
+
+        {{-- Gestioon de Ventas --}}
+        <li class="nav-item">
+            <a class="nav-link text-white" data-bs-toggle="collapse" href="#gestionVentas" role="button"
+                aria-expanded="false">
+                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    {{-- <i class="material-icons opacity-10">map</i> --}}
+                    <i class="fas fa-map"></i>
+                </div>
+                {{-- <span class="nav-link-text ms-1">Gestion del Personal</span> --}}
+                <h6 class="text-uppercase text-xs text-white font-weight-bolder opacity-8">Gestion de Ventas</h6>
+            </a>
+            <div class="collapse" id="gestionVentas">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ url('/ventas') }}">
+                            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                {{-- <i class="material-icons opacity-10">person_outline</i> --}}
+                                <i class="fas fa-route"></i>
+                            </div>
+                            <span class="nav-link-text ms-1">Ventas</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
     {{-- Gestioon de ruta --}}
     <li class="nav-item">
         <a class="nav-link text-white" data-bs-toggle="collapse" href="#gestionrutas" role="button"
@@ -215,8 +265,8 @@
         </div>
     </li>
 
-    {{-- Gestioon de Reportes --}}
-    <li class="nav-item">
+    {{-- Gestioon de Catalogos --}}
+    <li class="nav-item" hidden>
         <a class="nav-link text-white" data-bs-toggle="collapse" href="#catalogo" role="button"
             aria-expanded="false">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -237,17 +287,7 @@
                     </a>
                 </li>
             </ul>
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#">
-                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                            {{-- <i class="material-icons opacity-10">person_outline</i> --}}
-                            <i class="fas fa-tags"></i>
-                        </div>
-                        <span class="nav-link-text ms-1">Promociones</span>
-                    </a>
-                </li>
-            </ul>
+
         </div>
     </li>
 
