@@ -66,7 +66,7 @@
                                           </div>
                                       </td>
                                       <td class="align-middle text-sm">
-                                          <p class="text-xs font-weight-bold mb-0 ">{{ $venta->cliente->name }}</p>
+                                          <p class="text-xs font-weight-bold mb-0 ">{{ $venta->usuario->name }}</p>
                                           {{-- <p class="text-xs text-secondary mb-0">Organization</p> --}}
                                       </td>
                                       <td class="align-middle text-sm">
@@ -79,11 +79,23 @@
                                       </td>
                                       <td class="align-middle text-sm">
                                             <span
-                                            class="text-xs font-weight-bold mb-0 ">{{ $venta->total }}</span>
+                                            class="text-xs font-weight-bold mb-0 ">{{ $venta->total_venta }}</span>
                                       </td>
 
 
                                       <td class="align-middle">
+                                        <a href="#" class="text-success font-weight-bold text-xs" id="enlacePagar" onclick="event.preventDefault(); document.getElementById('FormPagoFacil').submit();">
+                                            Pagar
+                                        </a>
+
+                                        <form method="post" id="FormPagoFacil" action="https://checkout.pagofacil.com.bo/es/pay" enctype="multipart/form-data" class="form" style="display: none;">
+                                            @csrf {{-- Agrega el token CSRF de Laravel --}}
+                                            <input name="tcParametros" id="tcParametros" type="hidden" value="{{$venta->tcParametro}}">
+                                            <input name="tcCommerceID" id="tcCommerceID" type="hidden" value="{{$Commerceid}}">
+                                            <button type="submit" class="btn btn-primary" id="btnpagar">Pagar</button>
+                                        </form>
+
+
                                         <a href="{{url('/ventas/'.$venta->id.'/edit')}}" class="text-warning font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                           <span class="alert-icon align-middle">
                                             <span class="material-icons text-md">
@@ -122,5 +134,23 @@
       </div>
   </div>
 
+
+@endsection
+
+
+@section('scripts')
+    <script>
+        // Captura el evento clic en el enlace
+        document.getElementById('enlacePagar').addEventListener('click', function (e) {
+            // Previene el comportamiento predeterminado del enlace (evita la recarga de la página)
+            e.preventDefault();
+
+            // Muestra el formulario oculto
+            document.getElementById('FormPagoFacil').style.display = 'block';
+
+            // Simula un clic en el botón de pago
+            document.getElementById('btnpagar').click();
+        });
+    </script>
 
 @endsection

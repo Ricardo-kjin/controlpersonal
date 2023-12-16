@@ -34,7 +34,7 @@
                 @csrf
                 <div class="form-group">
                     <label for="nombre">Nombre de la producto</label>
-                    <input type="text" name="nombre" class="form-control" value="{{old('nombre',$producto->nombre)}}" id="nombre" required>
+                    <input type="text" name="nombre" class="form-control" value="{{old('nombre',$producto->nombre_producto)}}" id="nombre" required>
                 </div>
                 <div class="form-group">
                     <label for="description">Descripción de la producto</label>

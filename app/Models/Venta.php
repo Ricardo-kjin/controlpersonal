@@ -12,8 +12,10 @@ class Venta extends Model
     protected $fillable = [
         'nro_venta',
         'fecha_venta',
+        'tcParametro',
         'total_venta',
         'tipopago_id',
+        'promocion_id',
         'user_id',
     ];
 
@@ -28,10 +30,16 @@ class Venta extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
-    // Relación con DetalleVentas
-    public function detalleVentas()
+    // Relación con promociones
+    public function promocion()
     {
-        return $this->hasMany(DetalleVenta::class, 'venta_id');
+        return $this->belongsTo(Promocion::class, 'promocion_id');
     }
+
+    // Modelo Venta.php
+
+    public function productos() {
+        return $this->belongsToMany(Producto::class, 'detalle_ventas', 'venta_id', 'producto_id');
+    }
+
 }

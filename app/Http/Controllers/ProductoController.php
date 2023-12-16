@@ -106,12 +106,12 @@ class ProductoController extends Controller
 
         $this->validate($request,$rules,$messages);
 
-        $producto->nombre= $request->input('nombre');
+        $producto->nombre_producto= $request->input('nombre');
         $producto->descripcion= $request->input('description');
         $producto->stock= $request->input('stock');
         $producto->precio= $request->input('precio');
         $producto->unidad_medida= $request->input('unidad_medida');
-        $producto->estado= "Activo";
+        $producto->estado_producto= "Activo";
         $producto->grupo_id= $request->input('grupo');
         $producto->familia_id= $request->input('familia');
         // dd($subgrupo);

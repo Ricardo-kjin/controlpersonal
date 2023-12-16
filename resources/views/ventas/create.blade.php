@@ -61,7 +61,42 @@
                                 </select>
                             </div>
                         </div>
-
+                        <div class="form-control d-flex">
+                            <div class="input-group input-group-static mb-4 me-4">
+                                <label for="nro_venta">nro_venta:</label>
+                                <input type="text" name="nro_venta" class="form-control" value="{{ old('nro_venta') }}" id="nro_venta"
+                                    required>
+                            </div>
+                            <div class="input-group input-group-static mb-4 me-4">
+                                <label for="MonedaVenta" class="ms-0">MonedaVenta </label>
+                                <select class="form-control" id="MonedaVenta" name="MonedaVenta">
+                                        <option value="2">Bs</option>
+                                        <option value="1"> $u$</option>
+                                </select>
+                            </div>
+                            <div class="input-group input-group-static mb-4 me-4">
+                                <label for="cedula">cedula:</label>
+                                <input type="text" name="cedula" class="form-control" value="{{ old('cedula') }}" id="cedula"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="form-group d-flex">
+                            <div class="input-group input-group-static mb-4 me-4">
+                                <label for="email">Email:</label>
+                                <input type="text" name="email" class="form-control" value="{{ old('email') }}" id="email"
+                                    required>
+                            </div>
+                            <div class="input-group input-group-static mb-4 me-4">
+                                <label for="phone">Celular:</label>
+                                <input type="text" name="phone" class="form-control" value="{{ old('phone') }}" id="phone"
+                                    required>
+                            </div>
+                            <div class="input-group input-group-static mb-4 me-4">
+                                <label for="monto">Monto:</label>
+                                <input type="text" name="monto" class="form-control" value="{{ old('monto') }}" id="monto"
+                                    required>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="panel panel-primary">
                                 <div class="panel-body">
@@ -112,6 +147,8 @@
                                             id="detalles">
                                             <thead style="background-color:#A9D0F5">
                                                 <th>Opciones</th>
+                                                <th>Serie</th>
+                                                <th>Id Producto</th>
                                                 <th>Producto</th>
                                                 <th>Cantidad</th>
                                                 <th>Precio Venta</th>
@@ -122,6 +159,8 @@
                                             </tbody>
                                             <tfoot>
                                                 <th>Total</th>
+                                                <th></th>
+                                                <th></th>
                                                 <th></th>
                                                 <th></th>
                                                 <th></th>
@@ -153,14 +192,33 @@
 
 @section('scripts')
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         var cont = 0;
-        var detallesVenta = [];  // Cambiado el nombre de la variable para reflejar que ahora es un array de objetos
+        var detallesVenta = [];
 
-        // Definir la función eliminarFila en el ámbito global
-        window.eliminarFila = function(index, subtotalProducto) {
+        window.eliminarFila = function (index) {
             detallesVenta.splice(index, 1);
-            actualizarTotal(); // Llama a la función para actualizar el total
+
+            // Elimina la fila del DOM
+            var fila = document.getElementById('fila' + index);
+            var tbody = document.getElementById("detalles").getElementsByTagName('tbody')[0];
+
+            // Asegúrate de que la fila exista antes de intentar eliminarla
+            if (fila && tbody) {
+                tbody.removeChild(fila);
+            }
+
+            // Actualiza el total visualmente
+            actualizarTotalVisual(index);
+
+            // Actualiza la serie después de eliminar una fila
+            for (var i = index; i < detallesVenta.length; i++) {
+                var serieElement = document.getElementById('detalles').rows[i + 1].cells[1]; // 1 es la posición de la columna Serie
+                serieElement.textContent = i + 1;
+            }
+
+            // Actualiza el total lógico
+            actualizarTotal();
         };
 
         // Asignar el evento click al botón
@@ -168,26 +226,68 @@
 
         // Definición de la función agregarFila
         function agregarFila() {
-            var producto = document.getElementById("producto").options[document.getElementById("producto")
-                .selectedIndex].text;
-            var cantidad = document.getElementById("pcantidad").value;
-            var precio = document.getElementById("precio").value;
+            var productoSelect = document.getElementById("producto");
+            var producto = productoSelect.options[productoSelect.selectedIndex].text;
+            var cantidad = parseFloat(document.getElementById("pcantidad").value);
+            var precio = parseFloat(document.getElementById("precio").value);
             var subtotalProducto = cantidad * precio;
+
+            // Obtener la serie y el ID del producto
+            var serie = cont + 1;
+            var idProducto = productoSelect.value; // Asumiendo que el valor del producto es el Id
 
             // Validar que se haya seleccionado un producto y se haya ingresado una cantidad válida
             if (producto !== "" && cantidad !== "" && cantidad > 0 && precio !== "") {
-                var fila = "<tr id='fila" + cont + "'>" +
-                    "<td><button type='button' class='btn btn-warning' onclick='eliminarFila(" + cont + "," +
-                    subtotalProducto + ")'>X</button></td>" +
-                    "<td>" + producto + "</td>" +
-                    "<td>" + cantidad + "</td>" +
-                    "<td>" + precio + "</td>" +
-                    "<td>" + subtotalProducto + "</td>" +
-                    "</tr>";
+                // Crear elementos DOM en lugar de construir una cadena HTML
+                var fila = document.createElement('tr');
+                fila.id = 'fila' + cont;
 
-                cont++;
+                // Celda para el botón de eliminar
+                var celdaEliminar = document.createElement('td');
+                var botonEliminar = document.createElement('button');
+                botonEliminar.type = 'button';
+                botonEliminar.className = 'btn btn-warning';
+                botonEliminar.textContent = 'X';
+                botonEliminar.id = 'eliminarBtn' + cont;
+                botonEliminar.addEventListener('click', function () {
+                    var index = this.id.replace('eliminarBtn', '');
+                    eliminarFila(index);
+                });
+                celdaEliminar.appendChild(botonEliminar);
+                fila.appendChild(celdaEliminar);
+
+                // Celdas para Serie, Id Producto y otros datos
+                var celdaSerie = document.createElement('td');
+                celdaSerie.textContent = serie;
+                fila.appendChild(celdaSerie);
+
+                var celdaIdProducto = document.createElement('td');
+                celdaIdProducto.textContent = idProducto;
+                fila.appendChild(celdaIdProducto);
+
+                var celdaProducto = document.createElement('td');
+                celdaProducto.textContent = producto;
+                fila.appendChild(celdaProducto);
+
+                var celdaCantidad = document.createElement('td');
+                celdaCantidad.textContent = cantidad;
+                fila.appendChild(celdaCantidad);
+
+                var celdaPrecio = document.createElement('td');
+                celdaPrecio.textContent = precio;
+                fila.appendChild(celdaPrecio);
+
+                var celdaSubtotal = document.createElement('td');
+                celdaSubtotal.textContent = subtotalProducto;
+                fila.appendChild(celdaSubtotal);
+
+                // Agregar la fila al cuerpo de la tabla
+                document.getElementById("detalles").getElementsByTagName('tbody')[0].appendChild(fila);
+
                 // Construir objeto con detalles de la fila
                 var detalleFila = {
+                    serie: serie,
+                    idProducto: idProducto,
                     producto: producto,
                     cantidad: cantidad,
                     precio: precio,
@@ -197,21 +297,22 @@
                 // Agrega detalleFila al array detallesVenta
                 detallesVenta.push(detalleFila);
 
-                // Actualiza la tabla y el total
-                document.getElementById("detalles").getElementsByTagName('tbody')[0].insertAdjacentHTML(
-                    'beforeend', fila);
+                // Actualiza la serie visualmente y limpia los campos
+                var serieElement = document.getElementById('detalles').rows[cont + 1].cells[1]; // 1 es la posición de la columna Serie
+                serieElement.textContent = serie;
                 actualizarTotal();
-
                 limpiar();
+
+                cont++;
             } else {
                 alert("Error al ingresar el detalle de la venta, revise los datos del producto");
             }
-        }
+        };
 
         function actualizarTotal() {
             // Lógica para actualizar el total después de eliminar una fila
             // Obtener todos los subtotales actuales
-            var subtotales = detallesVenta.map(function(detalle) {
+            var subtotales = detallesVenta.map(function (detalle) {
                 return detalle.subtotal;
             });
 
@@ -226,15 +327,35 @@
 
             // Actualizar el campo detalle_venta
             document.getElementById("detalle_venta").value = JSON.stringify(detallesVenta);
-        }
+        };
 
         function limpiar() {
             document.getElementById("pcantidad").value = "";
             document.getElementById("stock").value = "";
             document.getElementById("precio").value = "";
-        }
+        };
+
+        function actualizarTotalVisual(index) {
+            // Obtener el elemento total en la interfaz
+            var totalElement = document.getElementById("total");
+
+            // Obtener el nuevo total después de eliminar la fila
+            var nuevoTotal = parseFloat(totalElement.textContent.replace("S/. ", ""));
+
+            // Restar el subtotal de la fila eliminada
+            var subtotales = detallesVenta.map(function (detalle) {
+                return detalle.subtotal;
+            });
+            var subtotalEliminado = subtotales[index];
+
+            nuevoTotal -= subtotalEliminado;
+
+            // Actualizar el elemento total en la interfaz
+            totalElement.innerHTML = "S/. " + nuevoTotal;
+        };
     });
 </script>
+
 
 
     <script>

@@ -32,4 +32,9 @@ class Producto extends Model
     {
         return $this->belongsTo(Subgrupo::class, 'subgrupo_id');
     }
+
+    //relacion con la tabla detalle de ventas
+    public function ventas() {
+        return $this->belongsToMany(Venta::class, 'detalle_ventas', 'producto_id', 'venta_id');
+    }
 }

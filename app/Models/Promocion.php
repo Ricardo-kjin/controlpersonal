@@ -8,4 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class Promocion extends Model
 {
     use HasFactory;
+
+    public function ventas()
+    {
+        return $this->hasMany(Venta::class, 'promocion_id');
+    }
+
 }
