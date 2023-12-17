@@ -46,14 +46,14 @@ class VentaController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
         // dd($request->input('promocion'));
         try {
             //PARTE 0000000000
             $lcComerceID           = $this->commerceid;
             $lnMoneda              = 2;
             $lnTelefono            = $request->phone;
-            $lcNombreUsuario       = "Jorge";//$request->tcRazonSocial;
+            $lcNombreUsuario       = "Pedro";//$request->tcRazonSocial;
             $lnCiNit               = $request->cedula;
             $lcNroPago             = $request->nro_venta;
             $lnMontoClienteEmpresa = $request->total_venta;
@@ -409,6 +409,7 @@ public function ConsultarEstado(Request $request)
 
 public function urlCallback(Request $request)
 {
+    dd($request);
     $Venta = $request->input("PedidoID");
     $Fecha = $request->input("Fecha");
     $NuevaFecha = date("Y-m-d", strtotime($Fecha));
