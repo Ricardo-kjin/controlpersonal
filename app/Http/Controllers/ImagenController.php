@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class ImagenController extends Controller
 {
-    private $idcliente=0;
+    private static $idcliente=0;
     /**
      * Display a listing of the resource.
      */
@@ -25,9 +25,11 @@ class ImagenController extends Controller
     {
         // dd($id);
         $imagen = Imagen::where('user_id',$id)->first();
+        $clienteId= $id;
+        // return view('imagenes.comparar',compact('clienteId'))
         // dd($imagen);
         // dd($imagen);
-        return view('imagenes.create', compact('imagen'));
+        return view('imagenes.create', compact('imagen','clienteId'));
         // return view('imagenes.create');
     }
 
@@ -105,15 +107,16 @@ class ImagenController extends Controller
 
     public function mostrarCaptura(String $id)
     {
-        $this->idcliente=$id;
-        return view('imagenes.comparar');
+        self::$idcliente=$id;
+        // $clienteId= $this->idcliente;
+        return view('imagenes.comparar',compact('id'));
         // return response()->json(['mensaje' => 'Imagen recibida y procesada con éxito']);
         // Resto de la lógica de comparación...
     }
     public function procesarCaptura(Request $request)
     {
 
-
+        // dd($request);
         // Obtener la imagen capturada del formulario
         $imagenCapturadaBase64 = $request->input('imagen');
 
@@ -125,7 +128,8 @@ class ImagenController extends Controller
             mkdir($directorioTemp, 0755, true);
         }
         $rutaI1 =storage_path('app/public/imagenes');
-        $foto=Imagen::where('user_id',auth()->user()->id)->first();
+        $foto=Imagen::where('user_id',$request->id)->first();
+        // dd($rutaI1,$foto);
         $rutaImagen =$rutaI1.'/'.$foto->url_imagen;
         // Guardar la imagen capturada temporalmente
         $rutaImagenTemp = $directorioTemp . '/captura.jpg';
@@ -169,12 +173,14 @@ class ImagenController extends Controller
         if ($similarity >= 70) {
                 //aqui quiero cambiar el estado_visita en la tabla ruta_ubicacion por la ubicacion del cliente que esta asociado a la ruta del vendedor
             // Obtener la ubicación del cliente asociado a la ruta del vendedor
-            $cliente = User::find($this->idcliente);
+            $cliente = User::find($request->id);
             $ubicacionCliente = $cliente->ubicacions->first(); // Asume que el cliente tiene una ubicación
-
+            // dd($ubicacionCliente);
             // Cambiar el estado_visita en la tabla ruta_ubicacion a "visitado"
             if ($ubicacionCliente) {
-                $ubicacionCliente->ruta->pivot->update(['estado_visita' => 'visitado']);
+                foreach ($ubicacionCliente->rutas as $ruta) {
+                    $ruta->pivot->update(['estado_visita' => 'visitado']);
+                }
             }
         }
 
@@ -182,6 +188,6 @@ class ImagenController extends Controller
         unlink($rutaImagenTemp);
 
         // Redireccionar a la vista con un mensaje
-        return redirect()->route('mostrarCaptura')->with('success', 'Captura procesada con éxito');
+        return redirect('/ver_rutas')->with('success', 'Captura procesada con éxito');
     }
 }

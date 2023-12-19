@@ -43,17 +43,17 @@
               <!-- En tu vista show.blade.php -->
                       @if ($imagen)
                           <div class="form-control">
-                            @if (auth()->user()->role=="cliente")
+                            @if (auth()->user()->role=="vendedor")
 
                             <div class="card-body d-flex justify-content-end pt-0 bt-0 mt-0">
-                                <a href="{{ url('/captura') }}" class="btn btn-icon btn-3 btn-success" role="button" aria-pressed="true">
+                                <a href="{{ url('/captura/'.$clienteId) }}" class="btn btn-icon btn-3 btn-success" role="button" aria-pressed="true">
                                     <span class="btn-inner--icon"><i class="material-icons">queue</i></span>
-                                    <span class="btn-inner--text">Abrir Cerradura</span>
+                                    <span class="btn-inner--text">Validar Visita al cliente: {{$clienteId}}</span>
                                 </a>
-                                <a href="{{ url('/captura') }}" class="btn btn-icon btn-3 btn-danger" role="button" aria-pressed="true">
+                                {{-- <a href="{{ url('/captura') }}" class="btn btn-icon btn-3 btn-danger" role="button" aria-pressed="true">
                                     <span class="btn-inner--icon"><i class="material-icons">queue</i></span>
                                     <span class="btn-inner--text">Cerrar Cerradura</span>
-                                </a>
+                                </a> --}}
                             </div>
                             @endif
 

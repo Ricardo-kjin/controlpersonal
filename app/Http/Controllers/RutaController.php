@@ -105,9 +105,28 @@ class RutaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Ruta $ruta)
+    public function show()
     {
-        //
+
+    }
+    /**
+     * Display the specified resource.
+     */
+    public function verRuta()
+    {
+        $ruta=Ruta::where('user_id',auth()->user()->id)->first();
+        // $ruta->ubicacions->where('user_id',$cliente->id)->first()->pivot->fecha_ini;
+        // dd($rutas);
+        $rutaId=$ruta->id;
+        $codRuta = $ruta->codigo_ruta;
+
+        $clientesEnRuta = User::whereHas('ubicacions.rutas', function ($query) use ($rutaId) {
+            $query->where('ruta_id', $rutaId);
+        })->with(['ubicacions.rutas' => function ($query) use ($rutaId) {
+            $query->where('ruta_id', $rutaId)->withPivot('id', 'fecha_ini', 'fecha_fin', 'estado_visita');
+        }])->get();
+        // dd($clientesEnRuta);
+        return view('rutas.show',compact('ruta','clientesEnRuta'));
     }
 
     /**
@@ -117,7 +136,8 @@ class RutaController extends Controller
     {
         // dd($ruta);
         // $ruta = Ruta::findOrFail($ruta_id);
-        $vendedors = User::vendedorsXAdmin(auth()->user()->id)->orderBy('id', 'asc')->get();
+        $vendedors = User::where(auth()->user()->id)->orderBy('id', 'asc')->get();
+        dd($vendedors);
         $routeId = $ruta->id; // Aquí colocas el ID de la ruta que será pasada como variable
         $rutaId=$routeId;
         ///////////////////ESTA PARTE DE PRUEBA COMPLETA

@@ -27,6 +27,7 @@
     <canvas id="canvas" width="640" height="480" style="display:none;"></canvas>
     <form action="{{ route('procesarCaptura') }}" method="post" enctype="multipart/form-data">
         @csrf
+        <input type="number" name="id" id="id" value="{{$id}}" hidden>
         <input type="hidden" name="imagen" id="imagen">
         <button type="submit">Procesar Captura</button>
     </form>

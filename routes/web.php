@@ -70,6 +70,8 @@ Route::get('/rutas/{ruta}/edit', [App\Http\Controllers\RutaController::class, 'e
 Route::post('/rutas', [App\Http\Controllers\RutaController::class, 'store']);
 Route::put('/rutas/{ruta}', [App\Http\Controllers\RutaController::class, 'update']);
 Route::delete('/rutas/{ruta}', [App\Http\Controllers\RutaController::class, 'destroy']);
+Route::get('/ver_rutas', [App\Http\Controllers\RutaController::class, 'verRuta']);
+
 
 //vendedores
 Route::get('/vendedores', [App\Http\Controllers\VendedorController::class, 'index']);
@@ -110,7 +112,7 @@ Route::get('/reportesprom', [App\Http\Controllers\ReportesController::class, 're
 Route::get('/imagenes/create/{id}', [App\Http\Controllers\ImagenController::class, 'create']);
 Route::post('/imagenes', [App\Http\Controllers\ImagenController::class, 'store']);
 
-Route::get('/captura', [App\Http\Controllers\ImagenController::class, 'mostrarCaptura'])->name('mostrarCaptura');
+Route::get('/captura/{id}', [App\Http\Controllers\ImagenController::class, 'mostrarCaptura'])->name('mostrarCaptura');
 Route::post('/captura/procesar', [App\Http\Controllers\ImagenController::class, 'procesarCaptura'])->name('procesarCaptura');
 
 //Promociones
@@ -136,6 +138,10 @@ Route::get('/ventas/create', [App\Http\Controllers\VentaController::class, 'crea
 Route::post('/ventas', [App\Http\Controllers\VentaController::class, 'store']);
 // Route::put('/ventas/{venta}', [App\Http\Controllers\VentaController::class, 'update']);
 Route::delete('/ventas/{venta}', [App\Http\Controllers\VentaController::class, 'destroy']);
+
+
+//UBICACION TIEMPO REAL
+
 
 
 

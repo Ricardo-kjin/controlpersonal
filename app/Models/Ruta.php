@@ -18,4 +18,9 @@ class Ruta extends Model
     public function user(){
         $this->belongsTo(User::class);
     }
+
+    public function usuarios()
+    {
+        return $this->hasMany(User::class);
+    }
 }
