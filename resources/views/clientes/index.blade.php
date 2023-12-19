@@ -26,12 +26,14 @@
                       </div>
                     @endif
                   </div>
-                  <div class="card-body d-flex justify-content-end pt-0 bt-0 mt-0">
-                    <a href="{{ url('/clientes/create') }}" class="btn btn-icon btn-3 btn-success" role="button" aria-pressed="true">
-                        <span class="btn-inner--icon"><i class="material-icons">person_add</i></span>
-                        <span class="btn-inner--text">Agregar Nuevo</span>
-                    </a>
-                  </div>
+                  @if (auth()->user()->role=="admin")
+                    <div class="card-body d-flex justify-content-end pt-0 bt-0 mt-0">
+                        <a href="{{ url('/clientes/create') }}" class="btn btn-icon btn-3 btn-success" role="button" aria-pressed="true">
+                            <span class="btn-inner--icon"><i class="material-icons">person_add</i></span>
+                            <span class="btn-inner--text">Agregar Nuevo</span>
+                        </a>
+                    </div>
+                  @endif
                   <div class="table-responsive p-0">
                       <table class="table align-items-center mb-0">
                           <thead>
@@ -101,19 +103,21 @@
                                           @method('DELETE')
 
                                         </form> --}}
-                                        <a href="#" class="text-danger font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user" onclick="event.preventDefault(); document.getElementById('eliminarRegistroForm').submit();">
-                                          <span class="alert-icon align-middle">
-                                            <span class="material-icons text-md">
-                                              delete
+                                        @if (auth()->user()->role=="admin")
+                                            <a href="#" class="text-danger font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user" onclick="event.preventDefault(); document.getElementById('eliminarRegistroForm').submit();">
+                                            <span class="alert-icon align-middle">
+                                                <span class="material-icons text-md">
+                                                delete
+                                                </span>
                                             </span>
-                                          </span>
-                                          Eliminar
-                                        </a>
-                                          <!-- Formulario oculto para enviar la solicitud DELETE -->
-                                        <form action="{{ URL('/clientes/'.$cliente->id) }}" method="POST" id="eliminarRegistroForm" style="display: none;">
-                                            @csrf
-                                            @method('DELETE')
-                                        </form>
+                                            Eliminar
+                                            </a>
+                                            <!-- Formulario oculto para enviar la solicitud DELETE -->
+                                            <form action="{{ URL('/clientes/'.$cliente->id) }}" method="POST" id="eliminarRegistroForm" style="display: none;">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+                                        @endif
 
                                       </td>
                                   </tr>

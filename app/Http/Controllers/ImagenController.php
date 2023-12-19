@@ -179,7 +179,10 @@ class ImagenController extends Controller
             // Cambiar el estado_visita en la tabla ruta_ubicacion a "visitado"
             if ($ubicacionCliente) {
                 foreach ($ubicacionCliente->rutas as $ruta) {
-                    $ruta->pivot->update(['estado_visita' => 'visitado']);
+                    $ruta->pivot->update([
+                        'estado_visita' => 'visitado',
+                        'updated_at'=> now()
+                    ]);
                 }
             }
         }

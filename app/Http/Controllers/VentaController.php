@@ -10,6 +10,7 @@ use App\Models\Venta;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class VentaController extends Controller
 {
@@ -49,7 +50,7 @@ class VentaController extends Controller
         // dd($request);
         // dd($request->input('promocion'));
 
-        /*
+
             //PARTE 1111111111
             $ATokenService        = $this->tokenservice;
             $AMoneda              = 2;
@@ -139,11 +140,10 @@ class VentaController extends Controller
 
             //DE ACA ERA SIGUIENDO PRUEBAS DEL SITIO WEB
             // $loClient = new Client();
-*/
 
-        // $Commerceid=$this->commerceid;
+        $Commerceid=$this->commerceid;
 
-        // return redirect('/ventas')->with(compact('tcParametros', 'Commerceid','notification'));
+         return redirect('/ventas')->with(compact('tcParametros', 'Commerceid','notification'));
 
     }
 
@@ -183,28 +183,71 @@ class VentaController extends Controller
     //     dd($request);
     //     return view('ventas.index');
     // }
-    public function RecolectarDatos(Request $request)
+    public function RecolectarDatos(string $id)
     {
+        $ventas=Venta::where('id',$id)->first();
+        $ventaId=$ventas->id;
+        // Supongamos que tienes una instancia de Venta llamada $venta
+        $pivotTableData = DB::table('detalle_ventas')
+        ->select('cantidad', 'precio', 'subtotal')
+        ->where('venta_id', $ventaId)
+        ->get();
+        $detallesVentas = [];
+
+        foreach ($ventas->productos as $producto) {
+            $detallesVentas[] = [
+                'serie'=>$producto->pivot->id,
+                'IdProducto'=>$producto->id,
+                'producto'=>$producto->nombre_producto,
+                'cantidad' => $producto->pivot->cantidad,
+                'precio' => $producto->pivot->precio,
+                'subtotal' => $producto->pivot->subtotal,
+                // Agrega otros campos de la tabla pivote según sea necesario
+            ];
+
+            // También puedes acceder a los campos del modelo Producto si es necesario
+            $nombreProducto = $producto->nombre_producto;
+            $descripcion = $producto->descripcion;
+            // Agrega otros campos del modelo Producto según sea necesario
+        }
+        //PRUEBAS PARA VER LAS VARIABLES NECESARIAS PARA
+        //dd(
+        //     $id,
+        //     $pivotTableData,
+        //     json_encode($detallesVentas),
+        //     $ventas->tipopago->id,
+        //     $ventas->nro_venta,
+        //     $ventas->usuario->name,
+        //     $ventas->usuario->cedula,
+        //     $ventas->usuario->phone,
+        //     $ventas->usuario->email,
+        //     $ventas->productos()->withPivot('cantidad','precio','subtotal')->get(),
+
+        // );
+        // $request=Venta::all();
+
         try {
             //PARTE 0000000000
             $lcComerceID           = $this->commerceid;
             $lnMoneda              = 2;
-            $lnTelefono            = $request->phone;
-            $lcNombreUsuario       = "Pedro"; //$request->tcRazonSocial;
-            $lnCiNit               = $request->cedula;
-            $lcNroPago             = $request->nro_venta;
-            $lnMontoClienteEmpresa = $request->total_venta;
-            $lcCorreo              = $request->email;
-            $lcUrlCallBack         = "https://www.tecnoweb.org.bo/inf513/grupo11sc/proyecto2/controlpersonal/public/api/url-callback";
-            $lcUrlReturn           =  "https://www.tecnoweb.org.bo/inf513/grupo11sc/proyecto2/controlpersonal/public/";
-            $laPedidoDetalle       = $request->detalle_venta;
+            $lnTelefono            = $ventas->usuario->phone;
+            $lcNombreUsuario       = $ventas->usuario->name; //$request->tcRazonSocial;
+            $lnCiNit               = $ventas->usuario->cedula;
+            $lcNroPago             = $ventas->nro_venta;
+            $lnMontoClienteEmpresa = $ventas->total_venta;
+            $lcCorreo              = $ventas->usuario->email;
+            $lcUrlCallBack         = "https://controlpersonal-production.up.railway.app/api/url-callback";
+            $lcUrlReturn           =  "https://controlpersonal-production.up.railway.app/";
+            // $lcUrlCallBack         = "https://www.tecnoweb.org.bo/inf513/grupo11sc/proyecto2/controlpersonal/public/api/url-callback";
+            // $lcUrlReturn           =  "https://www.tecnoweb.org.bo/inf513/grupo11sc/proyecto2/controlpersonal/public/";
+            $laPedidoDetalle       = json_encode($detallesVentas);
             $lcUrl                 = "";
 
             $loClient = new Client();
 
-            if ($request->tipopago == 1) {
+            if ($ventas->tipopago->id == 1) {
                 $lcUrl = "https://serviciostigomoney.pagofacil.com.bo/api/servicio/generarqrv2";
-            } elseif ($request->tipopago == 2) {
+            } elseif ($ventas->tipopago->id == 2) {
                 $lcUrl = "https://serviciostigomoney.pagofacil.com.bo/api/servicio/realizarpagotigomoneyv2";
             }
 
@@ -230,16 +273,20 @@ class VentaController extends Controller
                 'headers' => $laHeader,
                 'json' => $laBody
             ]);
-
+            // dd($laBody);
             $laResult = json_decode($loResponse->getBody()->getContents());
 
-            if ($request->tipopago == 1) {
-
+            if ($ventas->tipopago->id == 1) {
                 $laValues = explode(";", $laResult->values)[1];
 
+
                 $laQrImage = "data:image/png;base64," . json_decode($laValues)->qrImage;
+                $ventas->tcParametros=$laQrImage;
+                $ventas->update();
+                $imagenQrDeVentas= $ventas->tcParametros;
+                return view('ventas.qr', compact('laQrImage'));
                 echo '<img src="' . $laQrImage . '" alt="Imagen base64">';
-            } elseif ($request->tipopago == 2) {
+            } elseif ($ventas->tipopago->id == 2) {
 
                 $csrfToken = csrf_token();
 

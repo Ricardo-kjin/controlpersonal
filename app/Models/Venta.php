@@ -38,8 +38,13 @@ class Venta extends Model
 
     // Modelo Venta.php
 
-    public function productos() {
-        return $this->belongsToMany(Producto::class, 'detalle_ventas', 'venta_id', 'producto_id');
-    }
+    // public function productos() {
+    //     return $this->belongsToMany(Producto::class, 'detalle_ventas', 'venta_id', 'producto_id');
+    // }
+    public function productos()
+{
+    return $this->belongsToMany(Producto::class, 'detalle_ventas', 'venta_id', 'producto_id')
+        ->withPivot('id','cantidad', 'precio', 'subtotal');
+}
 
 }

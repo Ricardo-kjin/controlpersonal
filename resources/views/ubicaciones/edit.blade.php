@@ -15,14 +15,20 @@
         <div class="card-header border-0">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="mb-0">Editar la ubicación para el {{$ubicacion->user()->first()->role}} {{$ubicacion->user()->first()->name}}</h3>
+                    @if (auth()->user()->role=="admin" || auth()->user()->role=="cliennte")
+                        <h3 class="mb-0">Editar la ubicación para el {{$ubicacion->user()->first()->role}} {{$ubicacion->user()->first()->name}}</h3>
+                    @else
+                    <h3 class="mb-0">Ubicacion del {{$ubicacion->user()->first()->role}}: {{$ubicacion->user()->first()->name}}</h3>
+                    @endif
                 </div>
-                <div class="col text-right">
-                    <a href="{{ url('/clientes') }}" class="btn btn-sm btn-success">
-                        <i class="fas fa-chevron-left"></i>
-                        Regresar
-                    </a>
-                </div>
+                @if (auth()->user()->role=="admin" || auth()->user()->role=="cliennte")
+                    <div class="col text-right">
+                        <a href="{{ url('/clientes') }}" class="btn btn-sm btn-success">
+                            <i class="fas fa-chevron-left"></i>
+                            Regresar
+                        </a>
+                    </div>
+                @endif
             </div>
         </div>
         <div class="card-body">
@@ -54,8 +60,10 @@
                     {{-- <input type="text" id="searchmap"> --}}
                     <div id="map-canvas"></div>
                 </div>
+                @if (auth()->user()->role=="admin" || auth()->user()->role=="cliennte")
+                    <button type="submit" class="btn btn-primary">Guardar Ubicación</button>
 
-                <button type="submit" class="btn btn-primary">Guardar Ubicación</button>
+                @endif
             </form>
         </div>
     </div>

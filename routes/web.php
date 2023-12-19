@@ -138,7 +138,7 @@ Route::get('/ventas/create', [App\Http\Controllers\VentaController::class, 'crea
 Route::post('/ventas', [App\Http\Controllers\VentaController::class, 'store']);
 // Route::put('/ventas/{venta}', [App\Http\Controllers\VentaController::class, 'update']);
 Route::delete('/ventas/{venta}', [App\Http\Controllers\VentaController::class, 'destroy']);
-
+Route::get('/ventas/{venta}', [App\Http\Controllers\VentaController::class, 'RecolectarDatos']);
 
 //UBICACION TIEMPO REAL
 

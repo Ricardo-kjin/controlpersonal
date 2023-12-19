@@ -48,8 +48,11 @@
                                   <th class="text-uppercase  text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                       GRUPO</th>
                                   <th class="text-uppercase  text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                      FAMILIA</th>
-                                  <th class="text-secondary opacity-7">OPCIONES</th>
+                                      CATALOGO</th>
+                                    @if (auth()->user()->role=="admin")
+                                      <th class="text-secondary opacity-7">OPCIONES</th>
+
+                                    @endif
                               </tr>
                           </thead>
                           <tbody>
@@ -86,36 +89,37 @@
                                             <span
                                             class="text-xs font-weight-bold mb-0 ">{{ $producto->familia->nombre_familia }}</span>
                                       </td>
-
-                                      <td class="align-middle">
-                                        <a href="{{url('/productos/'.$producto->id.'/edit')}}" class="text-warning font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                          <span class="alert-icon align-middle">
-                                            <span class="material-icons text-md">
-                                              edit
+                                      @if (auth()->user()->role=="admin")
+                                        <td class="align-middle">
+                                            <a href="{{url('/productos/'.$producto->id.'/edit')}}" class="text-warning font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                            <span class="alert-icon align-middle">
+                                                <span class="material-icons text-md">
+                                                edit
+                                                </span>
                                             </span>
-                                          </span>
-                                          Editar
-                                        </a>
-                                        {{-- <form action="{{URL('/productos/'.$producto->id)}}" method="POST">
-                                          @csrf
-                                          @method('DELETE')
-
-                                        </form> --}}
-                                        <a href="#" class="text-danger font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user" onclick="event.preventDefault(); document.getElementById('eliminarRegistroForm').submit();">
-                                          <span class="alert-icon align-middle">
-                                            <span class="material-icons text-md">
-                                              delete
-                                            </span>
-                                          </span>
-                                          Eliminar
-                                        </a>
-                                          <!-- Formulario oculto para enviar la solicitud DELETE -->
-                                        <form action="{{ URL('/productos/'.$producto->id) }}" method="POST" id="eliminarRegistroForm" style="display: none;">
+                                            Editar
+                                            </a>
+                                            {{-- <form action="{{URL('/productos/'.$producto->id)}}" method="POST">
                                             @csrf
                                             @method('DELETE')
-                                        </form>
 
-                                      </td>
+                                            </form> --}}
+                                            <a href="#" class="text-danger font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user" onclick="event.preventDefault(); document.getElementById('eliminarRegistroForm').submit();">
+                                            <span class="alert-icon align-middle">
+                                                <span class="material-icons text-md">
+                                                delete
+                                                </span>
+                                            </span>
+                                            Eliminar
+                                            </a>
+                                            <!-- Formulario oculto para enviar la solicitud DELETE -->
+                                            <form action="{{ URL('/productos/'.$producto->id) }}" method="POST" id="eliminarRegistroForm" style="display: none;">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
+
+                                        </td>
+                                      @endif
                                   </tr>
                               @endforeach
                           </tbody>

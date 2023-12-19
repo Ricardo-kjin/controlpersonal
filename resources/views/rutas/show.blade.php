@@ -10,7 +10,7 @@
         <div class="card-header border-0">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="mb-0">Nueva Ruta</h3>
+                    <h3 class="mb-0">Informacion de la Ruta</h3>
                 </div>
                 <div class="col text-right">
                     <a href="{{ url('/rutas') }}" class="btn btn-sm btn-success">
@@ -76,9 +76,21 @@
                                         @endforeach
                                     </select> --}}
                                     {{$cliente->ubicacions->first()->latitud}} -
-                                    {{$cliente->ubicacions->first()->longitud}}
+                                    {{$cliente->ubicacions->first()->longitud}} <br>
+                                    <span class="text-xs font-weight-bold mb-0 ">
+                                        @if ($cliente->ubicacions->first())
+                                          Ubicacion Registrada <br>
+                                          <a href="{{ url('/ubicaciones/' . $cliente->id . '/edit') }}">Editar Ubicacions</a>
+
+                                        @endif
+                                      </span>
                                 </td>
-                                <td>{{ optional($cliente->ubicacions->first()->rutas->first()->pivot)->estado_visita }}</td>
+                                <td>
+                                    {{ optional($cliente->ubicacions->first()->rutas->first()->pivot)->estado_visita }} <br>
+                                    @if ( optional($cliente->ubicacions->first()->rutas->first()->pivot)->updated_at )
+                                        fecha: {{ optional($cliente->ubicacions->first()->rutas->first()->pivot)->updated_at }}
+                                    @endif
+                                </td>
                                 <td>
                                     <input type="date" name="fechas[{{ $cliente->id }}][inicio]" value="{{ optional($cliente->ubicacions->first()->rutas->first()->pivot)->fecha_ini }}">
                                 </td>

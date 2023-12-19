@@ -34,7 +34,12 @@ class Producto extends Model
     }
 
     //relacion con la tabla detalle de ventas
-    public function ventas() {
-        return $this->belongsToMany(Venta::class, 'detalle_ventas', 'producto_id', 'venta_id');
+    // public function ventas() {
+    //     return $this->belongsToMany(Venta::class, 'detalle_ventas', 'producto_id', 'venta_id');
+    // }
+    public function ventas()
+    {
+        return $this->belongsToMany(Venta::class, 'detalle_ventas', 'producto_id', 'venta_id')
+            ->withPivot('id','cantidad', 'precio', 'subtotal');
     }
 }

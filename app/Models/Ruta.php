@@ -10,9 +10,11 @@ class Ruta extends Model
     use HasFactory;
 
 
+    // En el modelo Ruta
     public function ubicacions()
     {
-        return $this->belongsToMany(Ubicacion::class, 'ruta_ubicacion', 'ruta_id', 'ubicacion_id');
+        return $this->belongsToMany(Ubicacion::class, 'ruta_ubicacion', 'ruta_id', 'ubicacion_id')
+            ->withPivot('estado_visita', 'fecha_ini', 'fecha_fin', 'updated_at');
     }
 
     public function user(){

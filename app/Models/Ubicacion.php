@@ -22,6 +22,7 @@ class Ubicacion extends Model
     // En el modelo Ubicacion
     public function rutas()
     {
-        return $this->belongsToMany(Ruta::class, 'ruta_ubicacion', 'ubicacion_id', 'ruta_id');
+        return $this->belongsToMany(Ruta::class, 'ruta_ubicacion', 'ubicacion_id', 'ruta_id')
+            ->withPivot('estado_visita', 'fecha_ini', 'fecha_fin', 'updated_at');
     }
 }

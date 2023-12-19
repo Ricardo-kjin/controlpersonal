@@ -84,18 +84,14 @@
 
 
                                       <td class="align-middle">
-                                        <a href="#" class="text-success font-weight-bold text-xs" id="enlacePagar" onclick="event.preventDefault(); document.getElementById('FormPagoFacil').submit();">
-                                            Pagar
+                                        <a href="{{url('/ventas/'.$venta->id)}}" class="text-primary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                            <span class="alert-icon align-middle">
+                                              <span class="material-icons text-md">
+                                                attach_money
+                                              </span>
+                                            </span>
+                                            PAGAR
                                         </a>
-
-                                        <form method="post" id="FormPagoFacil" action="https://checkout.pagofacil.com.bo/es/pay" enctype="multipart/form-data" class="form" style="display: none;">
-                                            @csrf {{-- Agrega el token CSRF de Laravel --}}
-                                            <input name="tcParametros" id="tcParametros" type="hidden" value="{{$venta->tcParametro}}">
-                                            <input name="tcCommerceID" id="tcCommerceID" type="hidden" value="{{$Commerceid}}">
-                                            <button type="submit" class="btn btn-primary" id="btnpagar">Pagar</button>
-                                        </form>
-
-
                                         <a href="{{url('/ventas/'.$venta->id.'/edit')}}" class="text-warning font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                           <span class="alert-icon align-middle">
                                             <span class="material-icons text-md">
