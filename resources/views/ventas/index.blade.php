@@ -140,20 +140,21 @@
                                                 Pagar
                                             </a>
                                         @endif
+
                                         <a href="{{url('/ventas/'.$venta->id.'/edit')}}" class="text-warning font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                           <span class="alert-icon align-middle">
                                             <span class="material-icons text-md">
-                                              edit
+                                                visibility
                                             </span>
                                           </span>
-                                          Editar
+                                          Ver
                                         </a>
                                         {{-- <form action="{{URL('/ventas/'.$venta->id)}}" method="POST">
                                           @csrf
                                           @method('DELETE')
 
                                         </form> --}}
-                                        <a href="#" class="text-danger font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user" onclick="event.preventDefault(); document.getElementById('eliminarRegistroForm').submit();">
+                                        {{-- <a href="#" class="text-danger font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user" onclick="event.preventDefault(); document.getElementById('eliminarRegistroForm').submit();">
                                           <span class="alert-icon align-middle">
                                             <span class="material-icons text-md">
                                               delete
@@ -165,7 +166,7 @@
                                         <form action="{{ URL('/ventas/'.$venta->id) }}" method="POST" id="eliminarRegistroForm" style="display: none;">
                                             @csrf
                                             @method('DELETE')
-                                        </form>
+                                        </form> --}}
 
                                       </td>
                                   </tr>
