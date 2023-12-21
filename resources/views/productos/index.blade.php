@@ -49,10 +49,10 @@
                       </div>
                     @endif
                   </div>
-                  @if (auth()->user()->id=="admin")
+                  @if (auth()->user()->role=="admin")
                     <div class="card-body d-flex justify-content-end pt-0 bt-0 mt-0">
                         <a href="{{ url('/productos/create') }}" class="btn btn-icon btn-3 btn-success" role="button" aria-pressed="true">
-                            <span class="btn-inner--icon"><i class="material-icons">person_add</i></span>
+                            <span class="btn-inner--icon"><i class="material-icons">add</i></span>
                             <span class="btn-inner--text">Agregar Nuevo</span>
                         </a>
                     </div>
