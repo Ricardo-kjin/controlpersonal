@@ -24,18 +24,26 @@ class VentaController extends Controller
      */
     public function index()
     {
-        $ventas = Venta::all();
-        // Recorrer cada venta
-        foreach ($ventas as $venta) {
-            // Llamar al método ConsultarEstado para actualizar el estado de la venta
-            if ($venta->transaccion) {
-                $this->ConsultarEstado($venta->id);
-                # code...
-            }
-        }
 
-        $Commerceid = $this->commerceid;
-        return view('ventas.index', compact('ventas', 'Commerceid'));
+            if (auth()->user()->role=="cliente") {
+                # code...
+                $ventas=Venta::where('id',auth()->user()->id)->orderBy('id','asc')->get();
+                // Recorrer cada venta
+            }else {
+                # code...
+                $ventas = Venta::all();
+            }
+            foreach ($ventas as $venta) {
+                // Llamar al método ConsultarEstado para actualizar el estado de la venta
+                if ($venta->transaccion) {
+                    $this->ConsultarEstado($venta->id);
+                    # code...
+                }
+            }
+
+            $Commerceid = $this->commerceid;
+            return view('ventas.index', compact('ventas', 'Commerceid'));
+
     }
 
     /**
@@ -315,7 +323,7 @@ class VentaController extends Controller
                 $ventas->estado_venta=$laResult->status;
                 $ventas->save();
 
-                return view('ventas.index');
+                return redirect('/ventas');
                 /*
                 $csrfToken = csrf_token();
 
@@ -362,9 +370,9 @@ class VentaController extends Controller
     public function ConsultarEstado(string $id)
     {
         $venta=Venta::find($id);
-
         $lnTransaccion = $venta->transaccion;
-        // $lnTransaccion = $request->tnTransaccion;
+
+        // $lnTransaccion = $id;
 
         $loClientEstado = new Client();
 
@@ -385,15 +393,26 @@ class VentaController extends Controller
 
         $laResultEstadoTransaccion = json_decode($loEstadoTransaccion->getBody()->getContents());
         $mensajeCompleto = $laResultEstadoTransaccion->values->messageEstado;
+        // dd($laResultEstadoTransaccion,$mensajeCompleto);
 
-        // Dividir la cadena usando el delimitador "-"
-        $partes = explode('-', $mensajeCompleto);
+        if ($venta->tipopago_id==1) {
+            # code...
 
-        // Obtener el segundo elemento, que debería ser el estado "PROCESADO"
-        $estadoProcesado = trim($partes[1]);
-        $venta->estado_venta=$estadoProcesado;
-        $venta->save();
-        // dd($laResultEstadoTransaccion->values->messageEstado,$estadoProcesado,$venta->estado_venta);
+            // Dividir la cadena usando el delimitador "-"
+            $partes = explode('-', $mensajeCompleto);
+
+            // Obtener el segundo elemento, que debería ser el estado "PROCESADO"
+            $estadoProcesado = trim($partes[1]);
+            $venta->estado_venta=$estadoProcesado;
+            $venta->save();
+            // dd($laResultEstadoTransaccion->values->messageEstado,$estadoProcesado,$venta->estado_venta);
+        } else {
+            # code...
+            $partes = explode(',', $mensajeCompleto);
+            $venta->estado_venta=trim($partes[0]);;
+            $venta->save();
+        }
+
         // $texto = '<h5 class="text-center mb-4">Estado Transacción: ' . $laResultEstadoTransaccion->values->messageEstado . '</h5><br>';
 
         // return response()->json(['message' => $texto]);

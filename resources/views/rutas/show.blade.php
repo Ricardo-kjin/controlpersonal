@@ -80,7 +80,7 @@
                                     <span class="text-xs font-weight-bold mb-0 ">
                                         @if ($cliente->ubicacions->first())
                                           Ubicacion Registrada <br>
-                                          <a href="{{ url('/ubicaciones/' . $cliente->id . '/edit') }}">Editar Ubicacions</a>
+                                          <a href="{{ url('/ubicaciones/' . $cliente->id . '/edit') }}">ver Ubicacion</a>
 
                                         @endif
                                       </span>

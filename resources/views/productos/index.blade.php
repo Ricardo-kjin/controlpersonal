@@ -2,7 +2,29 @@
 
 @section('content')
 
+<style>
+    /* Estilos para el contenedor col */
+    .col {
+        text-align: center; /* Centra el contenido dentro del contenedor */
+    }
 
+    /* Estilos para el h5 */
+    #contadorVisitas {
+        display: inline-block; /* Convierte el h5 en un bloque en línea */
+        padding: 10px 20px; /* Ajusta el espaciado interno para que parezca un botón */
+        border: 2px solid #00ff00; /* Establece un borde verde */
+        margin: 0; /* Elimina el margen predeterminado del h5 */
+        color: #006600; /* Verde oscuro para el texto inicial */
+        background-color: #b3ffb3; /* Fondo verde claro */
+        cursor: pointer; /* Cambia el cursor al pasar el ratón */
+        transition: background-color 0.3s; /* Transición suave solo para el fondo */
+    }
+
+    /* Cambio de color de fondo al pasar el ratón */
+    #contadorVisitas:hover {
+        background-color: #80ff80; /* Verde más claro al pasar el ratón */
+    }
+</style>
     <div class="row">
       <div class="col-12">
           <div class="card my-1">
@@ -27,12 +49,15 @@
                       </div>
                     @endif
                   </div>
-                  <div class="card-body d-flex justify-content-end pt-0 bt-0 mt-0">
-                    <a href="{{ url('/productos/create') }}" class="btn btn-icon btn-3 btn-success" role="button" aria-pressed="true">
-                        <span class="btn-inner--icon"><i class="material-icons">person_add</i></span>
-                        <span class="btn-inner--text">Agregar Nuevo</span>
-                    </a>
-                  </div>
+                  @if (auth()->user()->id=="admin")
+                    <div class="card-body d-flex justify-content-end pt-0 bt-0 mt-0">
+                        <a href="{{ url('/productos/create') }}" class="btn btn-icon btn-3 btn-success" role="button" aria-pressed="true">
+                            <span class="btn-inner--icon"><i class="material-icons">person_add</i></span>
+                            <span class="btn-inner--text">Agregar Nuevo</span>
+                        </a>
+                    </div>
+
+                  @endif
                   <div class="table-responsive p-0">
                       <table class="table align-items-center mb-0">
                           <thead>
@@ -126,6 +151,25 @@
                       </table>
                   </div>
               </div>
+              <div class="col">
+                <h6 class="mb-0" id="contadorVisitas">Cargando contador...</h6>
+            </div>
+            <script>
+                // Obtener la clave única para la página actual
+                var paginaClave = 'pagina_visitas_{{ request()->path() }}';
+
+                // Obtener el contador de visitas actual almacenado en localStorage
+                var contadorVisitas = localStorage.getItem(paginaClave);
+
+                // Incrementar el contador de visitas o inicializarlo si no existe
+                contadorVisitas = contadorVisitas ? parseInt(contadorVisitas) + 1 : 1;
+
+                // Actualizar el contador de visitas en localStorage
+                localStorage.setItem(paginaClave, contadorVisitas);
+
+                // Mostrar el contador de visitas en la etiqueta con id "contadorVisitas"
+                document.getElementById('contadorVisitas').innerText = 'Visita # ' + contadorVisitas + '.';
+            </script>
           </div>
       </div>
   </div>
@@ -198,6 +242,7 @@
                 @endforeach
             </tbody>
         </table>
+
     </div>
 </div>
 

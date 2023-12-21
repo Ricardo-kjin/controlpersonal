@@ -179,7 +179,7 @@
                     <i class="fas fa-shopping-cart"></i>
                 </div>
                 {{-- <span class="nav-link-text ms-1">Gestion del Personal</span> --}}
-                <h6 class="text-uppercase text-xs text-white font-weight-bolder opacity-8">Gestion de Ventas</h6>
+                <h6 class="text-uppercase text-xs text-white font-weight-bolder opacity-8">Gestion de Cuentas</h6>
             </a>
             <div class="collapse" id="gestionVentas">
                 <ul class="navbar-nav">
@@ -189,7 +189,7 @@
                                 {{-- <i class="material-icons opacity-10">person_outline</i> --}}
                                 <i class="fas fa-chart-bar"></i>
                             </div>
-                            <span class="nav-link-text ms-1">Ventas</span>
+                            <span class="nav-link-text ms-1">Pagos</span>
                         </a>
                     </li>
                 </ul>
@@ -198,52 +198,55 @@
     @endif
 
     {{-- Gestioon de ruta --}}
-    <li class="nav-item">
-        <a class="nav-link text-white" data-bs-toggle="collapse" href="#gestionrutas" role="button"
-            aria-expanded="false">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                {{-- <i class="material-icons opacity-10">map</i> --}}
-                <i class="fas fa-map"></i>
+    @if (auth()->user()->role=="vendedor" || auth()->user()->role=="admin")
+        <li class="nav-item">
+            <a class="nav-link text-white" data-bs-toggle="collapse" href="#gestionrutas" role="button"
+                aria-expanded="false">
+                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                    {{-- <i class="material-icons opacity-10">map</i> --}}
+                    <i class="fas fa-map"></i>
+                </div>
+                {{-- <span class="nav-link-text ms-1">Gestion del Personal</span> --}}
+                <h6 class="text-uppercase text-xs text-white font-weight-bolder opacity-8">Gestion de Rutas</h6>
+            </a>
+            <div class="collapse" id="gestionrutas">
+                <ul class="navbar-nav">
+                    @if (auth()->user()->role=="vendedor")
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ url('/ver_rutas') }}">
+                                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                    {{-- <i class="material-icons opacity-10">person_outline</i> --}}
+                                    <i class="fas fa-route"></i>
+                                </div>
+                                <span class="nav-link-text ms-1">Ver Ruta</span>
+                            </a>
+                        </li>
+                    @endif
+                    @if (auth()->user()->role=="admin")
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ url('/rutas') }}">
+                                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                    {{-- <i class="material-icons opacity-10">person_outline</i> --}}
+                                    <i class="fas fa-route"></i>
+                                </div>
+                                <span class="nav-link-text ms-1">Rutas</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ url('/vermaps') }}">
+                                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                    {{-- <i class="material-icons opacity-10">group_work</i> --}}
+                                    <i class="fas fa-map-marked-alt"></i>
+                                </div>
+                                <span class="nav-link-text ms-1">Monitoreo</span>
+                            </a>
+                        </li>
+                    @endif
+                </ul>
             </div>
-            {{-- <span class="nav-link-text ms-1">Gestion del Personal</span> --}}
-            <h6 class="text-uppercase text-xs text-white font-weight-bolder opacity-8">Gestion de Rutas</h6>
-        </a>
-        <div class="collapse" id="gestionrutas">
-            <ul class="navbar-nav">
-                @if (auth()->user()->role=="vendedor")
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ url('/ver_rutas') }}">
-                            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                {{-- <i class="material-icons opacity-10">person_outline</i> --}}
-                                <i class="fas fa-route"></i>
-                            </div>
-                            <span class="nav-link-text ms-1">Ver Ruta</span>
-                        </a>
-                    </li>
-                @endif
-                @if (auth()->user()->role=="admin")
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ url('/rutas') }}">
-                            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                {{-- <i class="material-icons opacity-10">person_outline</i> --}}
-                                <i class="fas fa-route"></i>
-                            </div>
-                            <span class="nav-link-text ms-1">Rutas</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ url('/vermaps') }}">
-                            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                {{-- <i class="material-icons opacity-10">group_work</i> --}}
-                                <i class="fas fa-map-marked-alt"></i>
-                            </div>
-                            <span class="nav-link-text ms-1">Monitoreo</span>
-                        </a>
-                    </li>
-                @endif
-            </ul>
-        </div>
-    </li>
+        </li>
+
+    @endif
 
     {{-- Gestioon de Reportes --}}
 
@@ -276,7 +279,7 @@
     @endif
 
     {{-- Gestioon de CUENTAS --}}
-    @if (auth()->user()->role=="cliente")
+    @if (auth()->user()->role=="pedro")
         <li class="nav-item">
             <a class="nav-link text-white" data-bs-toggle="collapse" href="#cuentas" role="button"
                 aria-expanded="false">

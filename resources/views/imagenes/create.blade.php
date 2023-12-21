@@ -6,7 +6,7 @@
       <div class="card my-4">
           <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
               <div class="bg-gradient-info shadow-info border-radius-lg pt-4 pb-3">
-                  <h6 class="text-white text-capitalize ps-3">IMagen para el perfil</h6>
+                  <h6 class="text-white text-capitalize ps-3">Imagen para el perfil</h6>
               </div>
           </div>
           <div class="card-body">
@@ -63,21 +63,32 @@
                       @else
                           <div class="form-control">
                             <p>NO SUBIO UNA IMAGEN A SU PERFIL</p>
-                            <form method="POST" action="{{ url('/imagenes') }}" enctype="multipart/form-data">
-                                @csrf
-                                <div class="form-control">
-                                    <div class="input-group input-group-static mb-4">
-                                        <label for="nombre">ELEGIR IMAGEN: </label>
-                                        <br>
-                                        <input type="file" name="url_imagen" accept="image/*">
+                            @if (auth()->user()->role=="cliente")
+                                <form method="POST" action="{{ url('/imagenes') }}" enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="form-control">
+                                        <div class="input-group input-group-static mb-4">
+                                            <label for="nombre">ELEGIR IMAGEN: </label>
+                                            <br>
+                                            <input type="file" name="url_imagen" accept="image/*">
+                                        </div>
                                     </div>
+                                    <div>
+                                        <button type="submit" class="btn bg-gradient-primary">Guardar</button>
+
+                                        {{-- <a href="{{ url('/ver_rutas') }}" type="button" class="btn btn-outline-success"
+                                            title="Regresar"><i class="material-icons">arrow_back</i> Regresar</a> --}}
+                                    </div>
+                                </form>
+
+                            @endif
+                            @if (auth()->user()->role=="vendedor")
+                                <div class="card-body d-flex justify-content-end pt-0 bt-0 mt-0">
+                                    <a href="{{ url('/ver_rutas') }}" type="button" class="btn btn-outline-success"
+                                    title="Regresar"><i class="material-icons">arrow_back</i> Regresar</a>
                                 </div>
-                                <div>
-                                    <button type="submit" class="btn bg-gradient-primary">Guardar</button>
-                                    <a href="{{ url('/paises') }}" type="button" class="btn btn-outline-success"
-                                        title="Regresar"><i class="material-icons">arrow_back</i> Regresar</a>
-                                </div>
-                            </form>
+
+                            @endif
                           </div>
                       @endif
 

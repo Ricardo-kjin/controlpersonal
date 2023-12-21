@@ -42,13 +42,15 @@
                                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                       CLIENTE</th>
                                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                      TIPO DE PAGO</th>
-                                  <th class="text-uppercase  text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                      TIPO PAGO</th>
+                                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                       DESCUENTO</th>
                                   <th class="text-uppercase  text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                      Estado</th>
+                                      ESTADO</th>
                                   <th class="text-uppercase  text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                       TOTAL</th>
+                                  <th class="text-uppercase  text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                      TRANSACCION</th>
 
                                   <th class="text-secondary opacity-7">OPCIONES</th>
                               </tr>
@@ -86,6 +88,10 @@
                                       <td class="align-middle text-sm">
                                             <span
                                             class="text-xs font-weight-bold mb-0 ">{{ $venta->total_venta }}</span>
+                                      </td>
+                                      <td class="align-middle text-sm">
+                                            <span
+                                            class="text-xs font-weight-bold mb-0 ">{{ $venta->transaccion }}</span>
                                       </td>
 
 
@@ -125,7 +131,14 @@
                                             @endif
 
                                         @else
-
+                                            <a href="{{url('/ventas/'.$venta->id)}}" class="text-primary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                <span class="alert-icon align-middle">
+                                                    <span class="material-icons text-md">
+                                                        attach_money
+                                                    </span>
+                                                </span>
+                                                Pagar
+                                            </a>
                                         @endif
                                         <a href="{{url('/ventas/'.$venta->id.'/edit')}}" class="text-warning font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                           <span class="alert-icon align-middle">
@@ -161,6 +174,31 @@
                       </table>
                   </div>
               </div>
+            <!-- Contador de visitas para Vista 1 -->
+            <div class="card-body">
+                <button id="visit-counter-btn" class="btn btn-success btn-sm">
+                    Vista 1 Visitas: <span id="visit-count-view1">0</span>
+                </button>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    // Definir un identificador único para la Vista 1
+                    const view1Id = 'view1';
+
+                    // Recuperar el valor actual del contador de visitas para la Vista 1
+                    let visitCountView1 = localStorage.getItem(view1Id) || 0;
+
+                    // Incrementar el contador de visitas para la Vista 1
+                    visitCountView1++;
+
+                    // Mostrar el contador en el elemento con id "visit-count-view1"
+                    document.getElementById('visit-count-view1').textContent = visitCountView1;
+
+                    // Almacenar el nuevo valor del contador para la Vista 1 en localStorage
+                    localStorage.setItem(view1Id, visitCountView1.toString());
+                });
+            </script>
           </div>
       </div>
   </div>
@@ -182,6 +220,30 @@
             // Simula un clic en el botón de pago
             document.getElementById('btnpagar').click();
         });
+    </script>
+    <script>
+        // Función para llamar a la ruta cada 5 segundos y 4 veces
+        function llamarRuta() {
+            // Realizar la solicitud a la ruta
+            fetch('/ventas')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Respuesta de la ruta:', data);
+                })
+                .catch(error => console.error('Error al llamar a la ruta:', error));
+        }
+
+        // Llamar a la función cada 5 segundos y repetir 4 veces
+        let contador = 0;
+        const intervalId = setInterval(function () {
+            if (contador < 4) {
+                llamarRuta();
+                contador++;
+            } else {
+                clearInterval(intervalId); // Detener el intervalo después de 4 llamadas
+                console.log('Llamadas completadas');
+            }
+        }, 5000);
     </script>
 
 @endsection
