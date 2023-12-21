@@ -12,11 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('ventas', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('nro_venta');
             $table->date('fecha_venta');
             $table->decimal('total_venta', 10, 2);
-            $table->text('tcParametro'); // Usar el tipo text para permitir longitudes mayores
+            $table->integer('transaccion')->nullable();
+            $table->string('estado_venta')->nullable();
+            $table->text('tcParametro')->nullable(); // Usar el tipo text para permitir longitudes mayores
             $table->unsignedBigInteger('tipopago_id');
             $table->foreign('tipopago_id')->references('id')->on('tipo_pagos')->onDelete('cascade');
             $table->unsignedBigInteger('promocion_id');

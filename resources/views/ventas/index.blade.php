@@ -46,6 +46,8 @@
                                   <th class="text-uppercase  text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                       DESCUENTO</th>
                                   <th class="text-uppercase  text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                      Estado</th>
+                                  <th class="text-uppercase  text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                       TOTAL</th>
 
                                   <th class="text-secondary opacity-7">OPCIONES</th>
@@ -78,20 +80,53 @@
                                               class="text-xs font-weight-bold mb-0 ">{{ $venta->promocion->descuento }}</span>
                                       </td>
                                       <td class="align-middle text-sm">
+                                          <span
+                                              class="text-xs font-weight-bold mb-0 ">{{ $venta->estado_venta }}</span>
+                                      </td>
+                                      <td class="align-middle text-sm">
                                             <span
                                             class="text-xs font-weight-bold mb-0 ">{{ $venta->total_venta }}</span>
                                       </td>
 
 
                                       <td class="align-middle">
-                                        <a href="{{url('/ventas/'.$venta->id)}}" class="text-primary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                                            <span class="alert-icon align-middle">
-                                              <span class="material-icons text-md">
-                                                attach_money
-                                              </span>
-                                            </span>
-                                            Pagar
-                                        </a>
+                                        @if ($venta->tipopago_id==1)
+                                            @if ($venta->tcParametro)
+                                                <a href="{{url('/ventas/'.$venta->id)}}" class="text-primary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                    <span class="alert-icon align-middle">
+                                                        <span class="material-icons text-md">
+                                                            visibility
+                                                        </span>
+                                                    </span>
+                                                    Ver Qr
+
+                                                </a>
+                                            @else
+                                                @if ($venta->estado_venta=="pagado")
+                                                    <a href="#" class="text-success font-weight-bold text-xs">
+                                                        <span class="alert-icon align-middle">
+                                                            <span class="material-icons text-md">
+                                                                attach_money
+                                                            </span>
+                                                        </span>
+                                                        Pagado
+                                                    </a>
+                                                @else
+
+                                                @endif
+                                                <a href="{{url('/ventas/'.$venta->id)}}" class="text-primary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                                    <span class="alert-icon align-middle">
+                                                        <span class="material-icons text-md">
+                                                            attach_money
+                                                        </span>
+                                                    </span>
+                                                    Pagar
+                                                </a>
+                                            @endif
+
+                                        @else
+
+                                        @endif
                                         <a href="{{url('/ventas/'.$venta->id.'/edit')}}" class="text-warning font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                           <span class="alert-icon align-middle">
                                             <span class="material-icons text-md">

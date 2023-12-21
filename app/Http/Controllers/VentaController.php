@@ -25,6 +25,15 @@ class VentaController extends Controller
     public function index()
     {
         $ventas = Venta::all();
+        // Recorrer cada venta
+        foreach ($ventas as $venta) {
+            // Llamar al método ConsultarEstado para actualizar el estado de la venta
+            if ($venta->transaccion) {
+                $this->ConsultarEstado($venta->id);
+                # code...
+            }
+        }
+
         $Commerceid = $this->commerceid;
         return view('ventas.index', compact('ventas', 'Commerceid'));
     }
@@ -115,7 +124,8 @@ class VentaController extends Controller
                 'nro_venta' => $request->input('nro_venta'),
                 'fecha_venta' => Carbon::now()->toDateString(),//colocar la fecha de ahora
                 'total_venta' => $request->input('total_venta'),
-                'tcParametro' => $tcParametros,
+                'estado_venta' => "inicio",
+                // 'tcParametro' => $tcParametros,
             ]);
 
             // Obtener el detalle de venta desde el request
@@ -236,10 +246,10 @@ class VentaController extends Controller
             $lcNroPago             = $ventas->nro_venta;
             $lnMontoClienteEmpresa = $ventas->total_venta;
             $lcCorreo              = $ventas->usuario->email;
-            $lcUrlCallBack         = "https://controlpersonal-production.up.railway.app/api/url-callback";
-            $lcUrlReturn           =  "https://controlpersonal-production.up.railway.app/";
-            // $lcUrlCallBack         = "https://www.tecnoweb.org.bo/inf513/grupo11sc/proyecto2/controlpersonal/public/api/url-callback";
-            // $lcUrlReturn           =  "https://www.tecnoweb.org.bo/inf513/grupo11sc/proyecto2/controlpersonal/public/";
+            // $lcUrlCallBack         = "https://controlpersonal-production.up.railway.app/api/url-callback";
+            // $lcUrlReturn           =  "https://controlpersonal-production.up.railway.app/";
+            $lcUrlCallBack         = "https://www.tecnoweb.org.bo/inf513/grupo11sc/proyecto2/controlpersonal/public/api/url-callback";
+            $lcUrlReturn           =  "https://www.tecnoweb.org.bo/inf513/grupo11sc/proyecto2/controlpersonal/public/";
             $laPedidoDetalle       = json_encode($detallesVentas);
             $lcUrl                 = "";
 
@@ -273,30 +283,40 @@ class VentaController extends Controller
                 'headers' => $laHeader,
                 'json' => $laBody
             ]);
-            // dd($laBody);
+            // dd($loResponse);
             $laResult = json_decode($loResponse->getBody()->getContents());
-            // dd($laResult->values);
+            // dd($laResult);
             if ($ventas->tipopago->id == 1) {
-                $laValues = explode(";", $laResult->values)[1];
-                /*if ($laResult->values==null) {
+                if ($laResult->values==null) {
                     # code...
                     $imagenQrDeVentas= $ventas->tcParametro;
+                    // $ventas->estado_venta="pendiente";
+                    $ventas->save();
+
                 } else {
                     # code...
                     $laValues = explode(";", $laResult->values)[1];
-                    // dd($laValues);
+                    $laValues0 = explode(";", $laResult->values)[0];
+                    // dd($laValues0,$laValues,json_decode($laValues)->id);
 
                     $laQrImage = "data:image/png;base64," . json_decode($laValues)->qrImage;
                     $ventas->tcParametro=$laQrImage;
-                    $ventas->update();
+                    $ventas->transaccion=$laValues0;
+                    // $ventas->estado_venta="pendiente";
+                    $ventas->save();
                     $imagenQrDeVentas= $ventas->tcParametro;
                 }
-                */
-                $laQrImage = "data:image/png;base64," . json_decode($laValues)->qrImage;
-                // return view('ventas.qr', compact('imagenQrDeVentas'));
-                echo '<img src="' . $laQrImage . '" alt="Imagen base64">';
+
+                return view('ventas.qr', compact('imagenQrDeVentas'));
+                // echo '<img src="' . $laQrImage . '" alt="Imagen base64">';
             } elseif ($ventas->tipopago->id == 2) {
 
+                $ventas->transaccion=$laResult->values;
+                $ventas->estado_venta=$laResult->status;
+                $ventas->save();
+
+                return view('ventas.index');
+                /*
                 $csrfToken = csrf_token();
 
                 echo '<h5 class="text-center mb-4">' . $laResult->message . '</h5>';
@@ -331,6 +351,7 @@ class VentaController extends Controller
                             }, 7000);
                         });
                     </script>';
+                    */
             }
         } catch (\Throwable $th) {
 
@@ -338,9 +359,12 @@ class VentaController extends Controller
         }
     }
 
-    public function ConsultarEstado(Request $request)
+    public function ConsultarEstado(string $id)
     {
-        $lnTransaccion = $request->tnTransaccion;
+        $venta=Venta::find($id);
+
+        $lnTransaccion = $venta->transaccion;
+        // $lnTransaccion = $request->tnTransaccion;
 
         $loClientEstado = new Client();
 
@@ -360,10 +384,19 @@ class VentaController extends Controller
         ]);
 
         $laResultEstadoTransaccion = json_decode($loEstadoTransaccion->getBody()->getContents());
+        $mensajeCompleto = $laResultEstadoTransaccion->values->messageEstado;
 
-        $texto = '<h5 class="text-center mb-4">Estado Transacción: ' . $laResultEstadoTransaccion->values->messageEstado . '</h5><br>';
+        // Dividir la cadena usando el delimitador "-"
+        $partes = explode('-', $mensajeCompleto);
 
-        return response()->json(['message' => $texto]);
+        // Obtener el segundo elemento, que debería ser el estado "PROCESADO"
+        $estadoProcesado = trim($partes[1]);
+        $venta->estado_venta=$estadoProcesado;
+        $venta->save();
+        // dd($laResultEstadoTransaccion->values->messageEstado,$estadoProcesado,$venta->estado_venta);
+        // $texto = '<h5 class="text-center mb-4">Estado Transacción: ' . $laResultEstadoTransaccion->values->messageEstado . '</h5><br>';
+
+        // return response()->json(['message' => $texto]);
     }
 
     public function urlCallback(Request $request)
@@ -384,5 +417,9 @@ class VentaController extends Controller
         }
 
         return response()->json($arreglo);
+    }
+
+    public function verificar(Request $request){
+        dd($request);
     }
 }

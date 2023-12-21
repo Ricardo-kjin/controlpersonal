@@ -36,7 +36,7 @@ use Illuminate\Support\Str;
               @csrf
               <div class="form-control">
                   <div class="input-group input-group-dynamic mb-4">
-                      <label for="name" class="form-label">NOMBRE ASESOR</label>
+                      <label for="name" class="form-label">NOMBRE CLIENTE</label>
                       <input type="text" name="name" class="form-control" value="{{ old('name') }}" id="name" required>
                   </div>
               </div>

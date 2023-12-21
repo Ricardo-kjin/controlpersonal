@@ -6,7 +6,7 @@
       <div class="card my-4">
           <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
               <div class="bg-gradient-info shadow-info border-radius-lg pt-4 pb-3">
-                  <h6 class="text-white text-capitalize ps-3">Acutalizar Familia: {{ $familia->nombre }}</h6>
+                  <h6 class="text-white text-capitalize ps-3">Acutalizar CATALOGO: {{ $familia->nombre }}</h6>
               </div>
           </div>
           <div class="card-body">
@@ -31,7 +31,7 @@
                   @csrf
                   <div class="form-control">
                       <div class="input-group input-group-static mb-4">
-                          <label for="nombre">NOMBRE DEL familia</label>
+                          <label for="nombre">NOMBRE DEL CATALOGO</label>
                           <input type="text" name="nombre" class="form-control"
                               value="{{ old('nombre', $familia->nombre) }}" id="nombre" required>
                       </div>
@@ -50,7 +50,7 @@
         <div class="card-header border-0">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="mb-0">Editar Familia {{$familia->nombre}}</h3>
+                    <h3 class="mb-0">Editar CATALOGO: {{$familia->nombre}}</h3>
                 </div>
                 <div class="col text-right">
                     <a href="{{ url('/familias') }}" class="btn btn-sm btn-success">

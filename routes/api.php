@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/url-callback', [VentaController::class, 'urlCallback']);
+Route::post('/url-callback', [VentaController::class, 'urlCallback']);
 
 
 Route::get('developer/{user}',[DeveloperController::class,'obtenerUSer']);

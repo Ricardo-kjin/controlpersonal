@@ -110,7 +110,7 @@
                                 {{-- <i class="material-icons opacity-10">person_outline</i> --}}
                                 <i class="fas fa-cube"></i> <i class="fas fa-users"></i>
                             </div>
-                            <span class="nav-link-text ms-1">Familia</span>
+                            <span class="nav-link-text ms-1">Catalogo</span>
                         </a>
                     </li>
                     <li class="nav-item">

@@ -142,8 +142,10 @@ Route::post('/ventas', [App\Http\Controllers\VentaController::class, 'store']);
 Route::delete('/ventas/{venta}', [App\Http\Controllers\VentaController::class, 'destroy']);
 Route::get('/ventas/{venta}', [App\Http\Controllers\VentaController::class, 'RecolectarDatos']);
 
-//UBICACION TIEMPO REAL
-
+//AUXILIARES
+//VERIFICAR PAGO QR
+Route::post('/verificar', [App\Http\Controllers\VentaController::class, 'verificar']);
+Route::get('/verificar/{id}', [App\Http\Controllers\VentaController::class, 'ConsultarEstado']);
 
 
 
