@@ -277,7 +277,8 @@ class VentaController extends Controller
             $laResult = json_decode($loResponse->getBody()->getContents());
             // dd($laResult->values);
             if ($ventas->tipopago->id == 1) {
-                if ($laResult->values==null) {
+                $laValues = explode(";", $laResult->values)[1];
+                /*if ($laResult->values==null) {
                     # code...
                     $imagenQrDeVentas= $ventas->tcParametro;
                 } else {
@@ -290,7 +291,8 @@ class VentaController extends Controller
                     $ventas->update();
                     $imagenQrDeVentas= $ventas->tcParametro;
                 }
-
+                */
+                $laQrImage = "data:image/png;base64," . json_decode($laValues)->qrImage;
                 // return view('ventas.qr', compact('imagenQrDeVentas'));
                 echo '<img src="' . $laQrImage . '" alt="Imagen base64">';
             } elseif ($ventas->tipopago->id == 2) {
