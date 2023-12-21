@@ -27,7 +27,8 @@ class VentaController extends Controller
 
             if (auth()->user()->role=="cliente") {
                 # code...
-                $ventas=Venta::where('id',auth()->user()->id)->orderBy('id','asc')->get();
+                $ventas=Venta::where('user_id',auth()->user()->id)->orderBy('id','asc')->get();
+                // dd($ventas);
                 // Recorrer cada venta
             }else {
                 # code...

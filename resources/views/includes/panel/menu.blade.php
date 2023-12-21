@@ -169,7 +169,7 @@
             @endif
         </div>
     </li>
-    @if (auth()->user()->role=="vendedor" || auth()->user()->role=="admin")
+    @if (auth()->user()->role=="vendedor" || auth()->user()->role=="admin" || auth()->user()->role=="cliente"  )
         {{-- Gestioon de Ventas --}}
         <li class="nav-item">
             <a class="nav-link text-white" data-bs-toggle="collapse" href="#gestionVentas" role="button"
