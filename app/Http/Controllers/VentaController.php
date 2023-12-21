@@ -275,16 +275,23 @@ class VentaController extends Controller
             ]);
             // dd($laBody);
             $laResult = json_decode($loResponse->getBody()->getContents());
-
+            // dd($laResult->values);
             if ($ventas->tipopago->id == 1) {
-                $laValues = explode(";", $laResult->values)[1];
+                if ($laResult->values==null) {
+                    # code...
+                    $imagenQrDeVentas= $ventas->tcParametro;
+                } else {
+                    # code...
+                    $laValues = explode(";", $laResult->values)[1];
+                    // dd($laValues);
 
+                    $laQrImage = "data:image/png;base64," . json_decode($laValues)->qrImage;
+                    $ventas->tcParametro=$laQrImage;
+                    $ventas->update();
+                    $imagenQrDeVentas= $ventas->tcParametro;
+                }
 
-                $laQrImage = "data:image/png;base64," . json_decode($laValues)->qrImage;
-                $ventas->tcParametros=$laQrImage;
-                $ventas->update();
-                $imagenQrDeVentas= $ventas->tcParametros;
-                return view('ventas.qr', compact('laQrImage'));
+                // return view('ventas.qr', compact('imagenQrDeVentas'));
                 echo '<img src="' . $laQrImage . '" alt="Imagen base64">';
             } elseif ($ventas->tipopago->id == 2) {
 

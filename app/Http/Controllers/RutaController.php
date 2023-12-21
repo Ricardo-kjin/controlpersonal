@@ -136,8 +136,8 @@ class RutaController extends Controller
     {
         // dd($ruta);
         // $ruta = Ruta::findOrFail($ruta_id);
-        $vendedors = User::where(auth()->user()->id)->orderBy('id', 'asc')->get();
-        dd($vendedors);
+        $vendedors = User::where('role','vendedor')->orderBy('id', 'asc')->get();
+        // dd($vendedors);
         $routeId = $ruta->id; // Aquí colocas el ID de la ruta que será pasada como variable
         $rutaId=$routeId;
         ///////////////////ESTA PARTE DE PRUEBA COMPLETA
@@ -201,13 +201,15 @@ class RutaController extends Controller
         foreach ($clientesSeleccionados as $cliente_id) {
             $fechas = $request->input('fechas.' . $cliente_id);
             // dd($fechas['inicio'],$fechas['fin']);
-            $cliente = User::clientesXAdmin(auth()->user()->id)->findOrFail($cliente_id);
+            $cliente = User::findOrFail($cliente_id);
+            $ubicaciones = User::find($cliente_id)->ubicacions;
+            // dd($cliente,$ubicaciones);
 
             // Aquí puedes realizar validaciones adicionales si es necesario
             // ...
 
             // Guardar en la tabla pivote
-            $ruta->ubicacions()->syncWithoutDetaching([$cliente->ubicacion->id=> [
+            $ruta->ubicacions()->syncWithoutDetaching([$ubicaciones->first()->id=> [
                 'fecha_ini' => $fechas['inicio'],
                 'fecha_fin' => $fechas['fin'],
                 'estado_visita' => "Pendiente",

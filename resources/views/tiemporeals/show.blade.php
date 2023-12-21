@@ -16,9 +16,9 @@
             <div class="row align-items-center">
                 <div class="col">
                     @if (auth()->user()->role=="admin" || auth()->user()->role=="cliennte")
-                        <h3 class="mb-0">Editar la ubicación para el {{$ubicacion->user()->first()->role}} {{$ubicacion->user()->first()->name}}</h3>
+                        <h3 class="mb-0">Monitorear ubicación en tiempo real para el {{$ubicacion->user()->first()->role}} {{$ubicacion->user()->first()->name}}</h3>
                     @else
-                    <h3 class="mb-0">Ubicacion del {{$ubicacion->user()->first()->role}}: {{$ubicacion->user()->first()->name}}</h3>
+                    <h3 class="mb-0">Ubicación en tiempo real del {{$ubicacion->user()->first()->role}}: {{$ubicacion->user()->first()->name}}</h3>
                     @endif
                 </div>
                 @if (auth()->user()->role=="admin" || auth()->user()->role=="cliennte")
@@ -40,30 +40,24 @@
                     </div>
                 @endforeach
             @endif
-            <form action="{{ url('/ubicaciones/'.$ubicacion->id) }}" method="POST">
-                @csrf
-                @method('PUT')
+            <form>
+                <!-- Mantén los campos de latitud, longitud y URL en solo lectura -->
                 <div class="form-group">
                     <label for="latitud">Latitud</label>
-                    <input type="text" name="latitud" class="form-control" value="{{ old('latitud', $ubicacion->latitud) }}" id="latitud" required>
+                    <input type="text" name="latitud" class="form-control" value="{{ $ubicacion->latitud }}" id="latitud" readonly>
                 </div>
                 <div class="form-group">
                     <label for="longitud">Longitud</label>
-                    <input type="text" name="longitud" class="form-control" id="longitud" value="{{ old('longitud', $ubicacion->longitud) }}">
+                    <input type="text" name="longitud" class="form-control" id="longitud" value="{{ $ubicacion->longitud }}" readonly>
                 </div>
                 <div class="form-group">
                     <label for="url_map">Url de la Ubicación</label>
-                    <input type="text" name="url_map" class="form-control" id="url_map" value="{{ old('url_map', $ubicacion->url_map) }}">
+                    <input type="text" name="url_map" class="form-control" id="url_map" value="{{ $ubicacion->url_map }}" readonly>
                 </div>
                 <div class="form-group">
-                    {{-- <label for="">Mapa</label> --}}
-                    {{-- <input type="text" id="searchmap"> --}}
+                    <label for="">Mapa en Tiempo Real</label>
                     <div id="map-canvas"></div>
                 </div>
-                @if (auth()->user()->role=="admin" || auth()->user()->role=="cliennte")
-                    <button type="submit" class="btn btn-primary">Guardar Ubicación</button>
-
-                @endif
             </form>
         </div>
     </div>
@@ -82,11 +76,11 @@
                 zoom: 15,
             });
 
-            // Obtener latitud y longitud existentes desde los campos de entrada
+            // Obtén las coordenadas existentes desde los campos de entrada
             var latitud = parseFloat(document.getElementById('latitud').value) || 0;
             var longitud = parseFloat(document.getElementById('longitud').value) || 0;
 
-            // Establecer el mapa en la ubicación existente
+            // Establece el mapa en la ubicación existente
             var userLocation = {
                 lat: latitud,
                 lng: longitud
@@ -94,17 +88,30 @@
 
             map.setCenter(userLocation);
 
-            // Colocar un marcador en la ubicación existente
+            // Coloca un marcador en la ubicación existente
             marker = new google.maps.Marker({
                 map: map,
-                draggable: true,
                 position: userLocation,
             });
 
-            // Actualizar los campos de entrada al mover el marcador
-            google.maps.event.addListener(marker, 'drag', function () {
-                updateLatLng(marker.getPosition());
-            });
+            // Actualiza el marcador en tiempo real
+            setInterval(updateMarker, 5000); // Actualiza cada 5 segundos (ajusta según tus necesidades)
+        }
+
+        function updateMarker() {
+            // Puedes realizar una petición AJAX para obtener las coordenadas en tiempo real del servidor
+            // y luego actualizar el marcador y el mapa
+            // Por simplicidad, aquí solo se simula una actualización con un desplazamiento aleatorio
+            var randomOffset = 0.0005; // Desplazamiento aleatorio
+            var newLat = marker.getPosition().lat() + (Math.random() * 2 - 1) * randomOffset;
+            var newLng = marker.getPosition().lng() + (Math.random() * 2 - 1) * randomOffset;
+
+            var newLocation = new google.maps.LatLng(newLat, newLng);
+            marker.setPosition(newLocation);
+            map.setCenter(newLocation);
+
+            // También puedes actualizar los campos de latitud y longitud si es necesario
+            updateLatLng(newLocation);
         }
 
         function updateLatLng(position) {

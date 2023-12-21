@@ -62,6 +62,8 @@ Route::get('/ubicaciones/vendedores/{user_id}', [App\Http\Controllers\UbicacionC
 Route::post('/ubicaciones/vendedores', [App\Http\Controllers\UbicacionController::class, 'storev']);
 Route::get('/ubicaciones/vendedores/{user_id}/edit', [App\Http\Controllers\UbicacionController::class, 'editv']);
 Route::put('/ubicaciones/vendedores/{ubicacion}', [App\Http\Controllers\UbicacionController::class, 'updatev']);
+//solo visualizacion
+Route::get('/ubicaciones/vendedores', [App\Http\Controllers\UbicacionController::class, 'show']);
 
 //Ruta
 Route::get('/rutas', [App\Http\Controllers\RutaController::class, 'index']);

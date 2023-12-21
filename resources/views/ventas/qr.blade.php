@@ -33,9 +33,10 @@
                     <!-- Mostrar la imagen aquí si la variable está definida -->
                     <div class="card-body">
                         <!-- Mostrar la imagen aquí si la variable está definida -->
-                        @isset($laQrImage)
-                            <img src="{{ $laQrImage }}" alt="Imagen QR">
+                        @isset($imagenQrDeVentas)
+                            <img src="{{ $imagenQrDeVentas }}" alt="Imagen QR">
                         @endisset
+                        <a href="{{url('/ventas')}}" type="button" class="btn btn-outline-success" title="Regresar"><i class="material-icons">arrow_back</i> Regresar</a>
                     </div>
                 </div>
             </div>

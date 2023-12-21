@@ -13,13 +13,18 @@ class VermapController extends Controller
 
     public function index()
     {
-        $vendedors = User::vendedorsXAdmin(auth()->user()->id)->has('ubicacions')->paginate(10);
+        $vendedors = User::where('role', 'vendedor')->has('ubicacions')->with('ubicacions')->paginate(10);
         // dd($vendedors);
+
         return view('tiemporeals.index', compact('vendedors'));
     }
-    public function verUbicacionCompartida(Request $request)
+    public function verUbicacionCompartida(string $id)
     {
-
+        // dd($id);
+        $user=User::find($id);
+        $ubicacion=Ubicacion::where('user_id',$id)->first();
+        // dd($user);
+        return view('tiemporeals.show',compact('user','ubicacion'));
 
     }
 

@@ -38,14 +38,26 @@
                         required>
                 </div>
                 <div class="form-group">
+
+                    <div class="input-group input-group-static mb-4">
+                        <label for="vendedor" class="ms-0">Seleccione un vendedor</label>
+                        <select class="form-control" name="vendedor" id="vendedor">
+                            @foreach ($vendedors as $vendedor)
+                                <option value="{{ $vendedor->id }}" @if ($vendedor->id==$ruta->user_id) selected @endif> {{ $vendedor->name }}</option>
+                            @endforeach
+                        </select>
+                      </div>
+                </div>
+                {{-- <div class="form-group">
                     <label for="vendedor">Vendedores</label>
                     <select name="vendedor" id="vendedor" class="form-control selectpicker" data-style="btn-primary"
                         title="Seleccionar vendedor" required>
-                        @foreach ($vendedors as $vendedor)
-                            <option value="{{ $vendedor->id }}" @if ($vendedor->id==$ruta->user_id) selected @endif> {{ $vendedor->name }}</option>
-                        @endforeach
+
+                            @foreach ($vendedors as $vendedor)
+                                <option value="{{ $vendedor->id }}" @if ($vendedor->id==$ruta->user_id) selected @endif> {{ $vendedor->name }}</option>
+                            @endforeach
                     </select>
-                </div>
+                </div> --}}
                 {{-- <div class="form-group">
                     <label for="familia">familia</label>
                     <select name="familia" id="familia" class="form-control selectpicker" data-style="btn-primary"

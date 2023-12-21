@@ -338,7 +338,7 @@
 
         </div>
     </li>
-
+    @if (auth()->user()->role=="cliente")
     <li class="nav-item mt-3">
         <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Control de Visitas</h6>
     </li>
@@ -350,7 +350,7 @@
             <span class="nav-link-text ms-1">Añadir una imagen al perfil</span>
         </a>
     </li>
-
+    @endif
     {{-- Perfil --}}
     <li class="nav-item mt-3">
         <h6 class="ps-4 ms-2 text-uppercase text-xs text-white font-weight-bolder opacity-8">Gestionar Perfil</h6>

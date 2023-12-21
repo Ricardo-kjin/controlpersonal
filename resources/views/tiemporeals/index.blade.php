@@ -38,8 +38,8 @@
                         </th>
 
                         <td>
-                            <a href="{{url('/vermaps/'.$vendedor->ubicacions->first()->id)}}">
-                                {{$vendedor->ubicacions->first()->url_map}}
+                            <a href="{{ url('/vermaps/' . $vendedor->id) }}">
+                                {{ $vendedor->ubicacions->first()->url_map }}
                             </a>
                             {{-- @if ($vendedor->ubicacion)
                                 Ubicacion Registrada <br> <a href="{{url('/ubicaciones/vendedores/'.$vendedor->id.'/edit')}}">Editar</a>

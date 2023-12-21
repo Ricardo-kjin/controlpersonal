@@ -90,7 +90,7 @@
                                                 attach_money
                                               </span>
                                             </span>
-                                            PAGAR
+                                            Pagar
                                         </a>
                                         <a href="{{url('/ventas/'.$venta->id.'/edit')}}" class="text-warning font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                           <span class="alert-icon align-middle">

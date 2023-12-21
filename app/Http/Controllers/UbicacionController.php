@@ -62,7 +62,7 @@ class UbicacionController extends Controller
      */
     public function show(Ubicacion $ubicacion)
     {
-        //
+        dd($ubicacion);
     }
 
     /**
@@ -117,6 +117,7 @@ class UbicacionController extends Controller
     public function createv(string $user_id)
     {
         $user=User::find($user_id);
+        // dd($user);
         return view('ubicaciones.createv',compact('user'));
     }
 

@@ -28,6 +28,7 @@
                 <thead class="thead-light">
                     <tr>
                         <th scope="col">Nombre</th>
+                        <th scope="col">Vendedor</th>
                         <th scope="col">estado</th>
                         <th scope="col">tiempo total</th>
                         <th scope="col"># Ubicaciones</th>
@@ -42,6 +43,9 @@
                     <tr>
                         <th scope="row">
                             {{$ruta->codigo_ruta}}
+                        </th>
+                        <th scope="row">
+                            {{$ruta->user->name}}
                         </th>
                         <th scope="row">
                             {{$ruta->estado_ruta}}

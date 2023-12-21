@@ -34,10 +34,15 @@
                         @csrf
                         <div class="form-control">
                             <div class="input-group input-group-static mb-4">
-                                <label for="nombre" class="ms-0">CLIENTE </label>
-                                <select class="form-control" id="cliente" name="cliente">
+                                <label for="cliente" class="ms-0">CLIENTE </label>
+                                <select class="form-control" id="cliente" name="cliente" data-live-search="true" onchange="updateClientInfo()">
                                     @foreach ($clientes as $cliente)
-                                        <option value="{{ $cliente->id }}"> {{ $cliente->name }}</option>
+                                        <option value="{{ $cliente->id }}"
+                                            data-phone="{{$cliente->phone}}"
+                                            data-cedula="{{$cliente->cedula}}"
+                                            data-email="{{$cliente->email}}">
+                                            {{ $cliente->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -371,6 +376,22 @@
             // Actualizar los campos de precio y stock
             precioInput.value = precio;
             stockInput.value = stock;
+        }
+        function updateClientInfo() {
+            var selectedClient = document.getElementById('cliente');
+            var emailInput = document.getElementById('email');
+            var phoneInput = document.getElementById('phone');
+            var cedulaInput = document.getElementById('cedula');
+
+            // Obtener los atributos de datos del elemento seleccionado
+            var email = selectedClient.options[selectedClient.selectedIndex].getAttribute('data-email');
+            var phone = selectedClient.options[selectedClient.selectedIndex].getAttribute('data-phone');
+            var cedula = selectedClient.options[selectedClient.selectedIndex].getAttribute('data-cedula');
+
+            // Actualizar los campos de email, phone y cedula
+            emailInput.value = email;
+            phoneInput.value = phone;
+            cedulaInput.value = cedula;
         }
     </script>
 @endsection
