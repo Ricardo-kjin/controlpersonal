@@ -26,6 +26,43 @@
   <!-- Nepcha Analytics (nepcha.com) -->
   <!-- Nepcha is a easy-to-use web analytics. No cookies and fully compliant with GDPR, CCPA and PECR. -->
   <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+  <!-- CSS personalizado para modo dark -->
+  <style>
+    /* Estilos para modo dark */
+    body.dark-mode {
+      background-color: #333;
+      color: #fff;
+      /* Agrega más estilos según sea necesario */
+    }
+  </style>
+
+<script>
+    // Función para obtener la hora actual en formato de 24 horas
+    function getCurrentHour() {
+      const now = new Date();
+      return now.getHours();
+    }
+
+    // Función para habilitar o deshabilitar el modo dark según la hora
+    function autoToggleDarkMode() {
+      const currentHour = getCurrentHour();
+      const darkModeToggle = document.getElementById('dark-version');
+
+      // Habilita el modo dark automáticamente entre las 18:00 y las 6:00
+      const isNightTime = currentHour >= 18 || currentHour < 6;
+
+      // Actualiza el estado del modo y el interruptor
+      document.body.classList.toggle('dark-mode', isNightTime);
+      darkModeToggle.checked = isNightTime;
+    }
+
+    // Ejecuta la función al cargar la página
+    document.addEventListener('DOMContentLoaded', autoToggleDarkMode);
+
+    // Configura un temporizador para verificar la hora cada cierto intervalo (por ejemplo, cada 1 hora)
+    setInterval(autoToggleDarkMode, 3600000); // 3600000 milisegundos = 1 hora
+  </script>
+
 
   @yield('styles')
 </head>
@@ -230,7 +267,7 @@
         <div class="mt-2 d-flex">
           <h6 class="mb-0">Luz / Oscuro</h6>
           <div class="form-check form-switch ps-0 ms-auto my-auto">
-            <input class="form-check-input mt-1 ms-auto" type="checkbox" id="dark-version" onclick="darkMode(this)">
+            <input class="form-check-input mt-1 ms-auto" type="checkbox" id="dark-version" onclick="checkAndToggleMode(this)">
           </div>
         </div>
         {{-- <hr class="horizontal dark my-sm-4">
@@ -256,7 +293,49 @@
   <script src="{{asset('js/plugins/smooth-scrollbar.min.js')}}"></script>
   <script src="{{asset('js/plugins/chartjs.min.js')}}"></script>
 
+ <!-- Script para cambiar automáticamente entre light y dark según la hora -->
+<script>
+    // Función para verificar la hora y ejecutar darkMode o lightMode si es necesario
+    function checkAndToggleMode(checkbox) {
+      const currentHour = getCurrentHour();
 
+      // Verifica si la hora está entre las 6:00 y las 18:00
+      const isDayTime = currentHour >= 6 && currentHour < 18;
+
+      // Ejecuta darkMode o lightMode según sea necesario
+      if (isDayTime) {
+        lightMode(checkbox);
+      } else {
+        darkMode(checkbox);
+      }
+    }
+
+    // Función lightMode
+    function lightMode(checkbox) {
+      // Implementa tu lógica para cambiar al modo de día aquí
+      document.body.classList.remove('dark-mode');
+      checkbox.checked = false; // Desmarca el checkbox
+    }
+
+    // Función darkMode
+    function darkMode(checkbox) {
+      // Implementa tu lógica para cambiar al modo oscuro aquí
+      document.body.classList.add('dark-mode');
+      checkbox.checked = true; // Marca el checkbox
+    }
+
+    // Ejecuta la función al cargar la página
+    document.addEventListener('DOMContentLoaded', function () {
+      // Verifica y ejecuta el modo según la hora al cargar la página
+      checkAndToggleMode(document.getElementById('dark-version'));
+    });
+
+    // Configura un temporizador para verificar la hora cada cierto intervalo (por ejemplo, cada 1 hora)
+    setInterval(function () {
+      // Verifica y ejecuta el modo según la hora cada hora
+      checkAndToggleMode(document.getElementById('dark-version'));
+    }, 3600000); // 3600000 milisegundos = 1 hora
+  </script>
 
   <script>
     var ctx = document.getElementById("chart-bars").getContext("2d");
@@ -505,6 +584,8 @@
       },
     });
   </script>
+  <!-- Script para cambiar automáticamente entre light y dark según la hora -->
+
   <script>
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {
