@@ -8,17 +8,10 @@ use Illuminate\Http\Request;
 
 class UbicacionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         //
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(string $user_id)
     {
         $user = User::find($user_id);
