@@ -115,82 +115,77 @@ class ImagenController extends Controller
     }
     public function procesarCaptura(Request $request)
     {
+    // Obtener la imagen capturada del formulario
+    $imagenCapturadaBase64 = $request->input('imagen');
 
-        // dd($request);
-        // Obtener la imagen capturada del formulario
-        $imagenCapturadaBase64 = $request->input('imagen');
+    // Guardar la imagen capturada temporalmente
+    $rutaImagenTemp = $this->guardarImagenTemporal($imagenCapturadaBase64);
 
-        // Guardar la imagen capturada temporalmente (puedes almacenarla en el sistema de archivos o en la base de datos)
-        // Crear el directorio 'temp' si no existe
-        $directorioTemp = storage_path('app/temp');
-        // dd($directorioTemp);
-        if (!file_exists($directorioTemp)) {
-            mkdir($directorioTemp, 0755, true);
-        }
-        $rutaI1 =storage_path('app/public/imagenes');
-        $foto=Imagen::where('user_id',$request->id)->first();
-        // dd($rutaI1,$foto);
-        $rutaImagen =$rutaI1.'/'.$foto->url_imagen;
-        // Guardar la imagen capturada temporalmente
-        $rutaImagenTemp = $directorioTemp . '/captura.jpg';
-        // dd($rutaImagenTemp,$rutaImagen);
-        file_put_contents($rutaImagenTemp, base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imagenCapturadaBase64)));
+    // Comparar con AWS Rekognition
+    $similarity = $this->compararCarasConRekognition($rutaImagenTemp, $request->id);
 
-        // Comparar con AWS Rekognition
-        $rekognition = new RekognitionClient([
-            'region' => 'us-east-1', // Reemplaza con tu región de AWS
-            'version' => 'latest',
-            'credentials' => [
-                'key' => 'AKIAUSCVC22QB42Y4MVM', // Reemplaza con tus credenciales de AWS
-                'secret' => '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',
-            ],
-        ]);
-
-
-        set_time_limit(120); // Aumenta el límite de tiempo a 120 segundos
-
-
-        // dd($rutaImagen);
-        // if (file_exists($rutaImagen)) {
-            // La imagen existe, ahora puedes continuar con el código
-            $result = $rekognition->compareFaces([
-                'SimilarityThreshold' => 70,
-                'SourceImage' => [
-                    'Bytes'=>file_get_contents($rutaImagen),
-                ],
-
-                'TargetImage' => [
-
-                    'Bytes'=>file_get_contents($rutaImagenTemp),
-                ],
-                // Otros parámetros según sea necesario
-            ]);
-
-
-        // Obtener la similitud de las caras
-        $similarity = $result['FaceMatches'][0]['Similarity'];
-
-        if ($similarity >= 70) {
-                //aqui quiero cambiar el estado_visita en la tabla ruta_ubicacion por la ubicacion del cliente que esta asociado a la ruta del vendedor
-            // Obtener la ubicación del cliente asociado a la ruta del vendedor
-            $cliente = User::find($request->id);
-            $ubicacionCliente = $cliente->ubicacions->first(); // Asume que el cliente tiene una ubicación
-            // dd($ubicacionCliente);
-            // Cambiar el estado_visita en la tabla ruta_ubicacion a "visitado"
-            if ($ubicacionCliente) {
-                foreach ($ubicacionCliente->rutas as $ruta) {
-                    $ruta->pivot->update([
-                        'estado_visita' => 'visitado',
-                        'updated_at'=> now()
-                    ]);
-                }
-            }
-        }
-
-        // Eliminar la imagen temporal después de procesarla
-        unlink($rutaImagenTemp);
-
-        // Redireccionar a la vista con un mensaje
-        return redirect('/ver_rutas')->with('success', 'Captura procesada con éxito');
+    // Si la similitud es alta, marcar la ubicación como visitada
+    if ($similarity >= 70) {
+        $this->marcarUbicacionComoVisitada($request->id);
     }
+
+    // Eliminar la imagen temporal después de procesarla
+    unlink($rutaImagenTemp);
+
+    // Redireccionar a la vista con un mensaje
+    return redirect('/ver_rutas')->with('success', 'Captura procesada con éxito');
+}
+
+private function guardarImagenTemporal($imagenBase64)
+{
+    $directorioTemp = storage_path('app/temp');
+    if (!file_exists($directorioTemp)) {
+        mkdir($directorioTemp, 0755, true);
+    }
+    $rutaImagenTemp = $directorioTemp . '/captura.jpg';
+    file_put_contents($rutaImagenTemp, base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $imagenBase64)));
+    return $rutaImagenTemp;
+}
+
+private function compararCarasConRekognition($rutaImagen, $userId)
+{
+    $rutaI1 = storage_path('app/public/imagenes');
+    $foto = Imagen::where('user_id', $userId)->first();
+    $rutaImagenCliente = $rutaI1.'/'.$foto->url_imagen;
+
+    $rekognition = new RekognitionClient([
+        'region' => 'us-east-1',
+        'version' => 'latest',
+        'credentials' => [
+            'key' => 'TU_ACCESS_KEY',
+            'secret' => 'TU_SECRET_KEY',
+        ],
+    ]);
+
+    $result = $rekognition->compareFaces([
+        'SimilarityThreshold' => 70,
+        'SourceImage' => [
+            'Bytes' => file_get_contents($rutaImagenCliente),
+        ],
+        'TargetImage' => [
+            'Bytes' => file_get_contents($rutaImagen),
+        ],
+    ]);
+
+    return $result['FaceMatches'][0]['Similarity'];
+}
+
+private function marcarUbicacionComoVisitada($userId)
+{
+    $cliente = User::find($userId);
+    $ubicacionCliente = $cliente->ubicacions->first();
+    if ($ubicacionCliente) {
+        foreach ($ubicacionCliente->rutas as $ruta) {
+            $ruta->pivot->update([
+                'estado_visita' => 'visitado',
+                'updated_at' => now()
+            ]);
+        }
+    }
+}
 }
