@@ -17,6 +17,7 @@ class Producto extends Model
         'estado_producto', 
         'unidad_medida', 
         'familia_id', 
+        //quitamos porque ya no necesitamos
         // 'grupo_id'
     ];
 
