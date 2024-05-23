@@ -131,4 +131,5 @@ class ClienteController extends Controller
         $notification="El cliente $clienteName se eliminó correctamente";
         return redirect('/clientes')->with(compact('notification'));
     }
+
 }

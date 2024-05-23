@@ -21,13 +21,13 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-//Familia
-Route::get('/familias', [App\Http\Controllers\FamiliaController::class, 'index']);
-Route::get('/familias/create', [App\Http\Controllers\FamiliaController::class, 'create']);
-Route::get('/familias/{familia}/edit', [App\Http\Controllers\FamiliaController::class, 'edit']);
-Route::post('/familias', [App\Http\Controllers\FamiliaController::class, 'store']);
-Route::put('/familias/{familia}', [App\Http\Controllers\FamiliaController::class, 'update']);
-Route::delete('/familias/{familia}', [App\Http\Controllers\FamiliaController::class, 'destroy']);
+//catalogos
+Route::get('/catalogos', [App\Http\Controllers\FamiliaController::class, 'index']);
+Route::get('/catalogos/create', [App\Http\Controllers\FamiliaController::class, 'create']);
+Route::get('/catalogos/{catalogo}/edit', [App\Http\Controllers\FamiliaController::class, 'edit']);
+Route::post('/catalogos', [App\Http\Controllers\FamiliaController::class, 'store']);
+Route::put('/catalogos/{catalogo}', [App\Http\Controllers\FamiliaController::class, 'update']);
+Route::delete('/catalogos/{catalogo}', [App\Http\Controllers\FamiliaController::class, 'destroy']);
 
 //Grupo
 Route::get('/grupos', [App\Http\Controllers\GrupoController::class, 'index']);

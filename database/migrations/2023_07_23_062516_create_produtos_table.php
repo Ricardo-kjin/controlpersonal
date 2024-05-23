@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('estado_producto');
             $table->string('unidad_medida');
 
-            $table->unsignedBigInteger('grupo_id');
-            $table->foreign('grupo_id')->references('id')->on('grupos')->onDelete('cascade');
+            // $table->unsignedBigInteger('grupo_id');
+            // $table->foreign('grupo_id')->references('id')->on('grupos')->onDelete('cascade');
             $table->unsignedBigInteger('familia_id');
             $table->foreign('familia_id')->references('id')->on('familias')->onDelete('cascade');
             // $table->unsignedBigInteger('user_id');

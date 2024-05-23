@@ -105,7 +105,7 @@
             <ul class="navbar-nav">
                 @if (auth()->user()->role=="admin")
                     <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ url('/familias') }}">
+                        <a class="nav-link text-white" href="{{ url('/catalogos') }}">
                             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                                 {{-- <i class="material-icons opacity-10">person_outline</i> --}}
                                 <i class="fas fa-cube"></i> <i class="fas fa-users"></i>
@@ -113,24 +113,22 @@
                             <span class="nav-link-text ms-1">Catalogo</span>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link text-white" href="{{ url('/grupos') }}">
                             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                {{-- <i class="material-icons opacity-10">group_work</i> --}}
                                 <i class="fas fa-cube"></i> <i class="fas fa-circle"></i>
                             </div>
                             <span class="nav-link-text ms-1">Grupo</span>
                         </a>
-                    </li>
-                    <li class="nav-item">
+                    </li> --}}
+                    {{-- <li class="nav-item">
                         <a class="nav-link text-white" href="{{ url('/subgrupos') }}">
                             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                {{-- <i class="material-icons opacity-10">group_work</i> --}}
                                 <i class="fas fa-cube"></i> <i class="fas fa-circle-notch"></i>
                             </div>
                             <span class="nav-link-text ms-1">Sub Grupo</span>
                         </a>
-                    </li>
+                    </li> --}}
 
                 @endif
                 <li class="nav-item">
@@ -143,7 +141,7 @@
                     </a>
                 </li>
             </ul>
-            @if (auth()->user()->role=="admin")
+            @if (auth()->user()->role=="otro")
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link text-white" href="{{ url('/promociones') }}">
@@ -169,32 +167,34 @@
             @endif
         </div>
     </li>
-    @if (auth()->user()->role=="vendedor" || auth()->user()->role=="admin" || auth()->user()->role=="cliente"  )
-        {{-- Gestioon de Ventas --}}
-        <li class="nav-item">
-            <a class="nav-link text-white" data-bs-toggle="collapse" href="#gestionVentas" role="button"
-                aria-expanded="false">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                    {{-- <i class="material-icons opacity-10">map</i> --}}
-                    <i class="fas fa-shopping-cart"></i>
+    @if (auth()->user()->role=="run")
+        @if (auth()->user()->role=="vendedor" || auth()->user()->role=="admin" || auth()->user()->role=="cliente"  )
+            {{-- Gestioon de Ventas --}}
+            <li class="nav-item">
+                <a class="nav-link text-white" data-bs-toggle="collapse" href="#gestionVentas" role="button"
+                    aria-expanded="false">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        {{-- <i class="material-icons opacity-10">map</i> --}}
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    {{-- <span class="nav-link-text ms-1">Gestion del Personal</span> --}}
+                    <h6 class="text-uppercase text-xs text-white font-weight-bolder opacity-8">Gestion de Cuentas</h6>
+                </a>
+                <div class="collapse" id="gestionVentas">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ url('/ventas') }}">
+                                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                                    {{-- <i class="material-icons opacity-10">person_outline</i> --}}
+                                    <i class="fas fa-chart-bar"></i>
+                                </div>
+                                <span class="nav-link-text ms-1">Pagos</span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-                {{-- <span class="nav-link-text ms-1">Gestion del Personal</span> --}}
-                <h6 class="text-uppercase text-xs text-white font-weight-bolder opacity-8">Gestion de Cuentas</h6>
-            </a>
-            <div class="collapse" id="gestionVentas">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ url('/ventas') }}">
-                            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                                {{-- <i class="material-icons opacity-10">person_outline</i> --}}
-                                <i class="fas fa-chart-bar"></i>
-                            </div>
-                            <span class="nav-link-text ms-1">Pagos</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </li>
+            </li>
+        @endif
     @endif
 
     {{-- Gestioon de ruta --}}
@@ -250,7 +250,7 @@
 
     {{-- Gestioon de Reportes --}}
 
-    @if (auth()->user()->role=="admin")
+    @if (auth()->user()->role=="run")
         <li class="nav-item">
             <a class="nav-link text-white" data-bs-toggle="collapse" href="#reportes" role="button"
                 aria-expanded="false">

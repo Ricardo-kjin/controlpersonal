@@ -23,10 +23,10 @@ class ProductoController extends Controller
      */
     public function create()
     {
-        $grupos=Grupo::orderBy('id','asc')->get();
+        // $grupos=Grupo::orderBy('id','asc')->get();
         $familias=Familia::orderBy('id','asc')->get();
         // dd($familias->pluck('id'));
-        return view('productos.create',compact('grupos','familias'));
+        return view('productos.create',compact('familias'));
     }
 
     /**
@@ -56,8 +56,8 @@ class ProductoController extends Controller
         $producto->precio= $request->input('precio');
         $producto->unidad_medida= $request->input('unidad_medida');
         $producto->estado_producto= "Activo";
-        $producto->grupo_id= $request->input('grupo');
-        $producto->familia_id= $request->input('familia');
+        // $producto->grupo_id= $request->input('grupo');
+        $producto->familia_id= $request->input('familia');//CATALOGOS
         // $producto->user_id= auth()->user()->id;
         // dd($producto);
         $producto->save();
@@ -79,10 +79,10 @@ class ProductoController extends Controller
      */
     public function edit(Producto $producto)
     {
-        $grupos=Grupo::orderBy('id','asc')->get();
+        // $grupos=Grupo::orderBy('id','asc')->get();
         $familias=Familia::orderBy('id','asc')->get();
 
-        return view('productos.edit', compact('producto','grupos','familias'));
+        return view('productos.edit', compact('producto','familias'));
     }
 
     /**
@@ -98,8 +98,8 @@ class ProductoController extends Controller
         ];
 
         $messages=[
-            'nombre.required'=>'El nombre de la grupo es obligatorio',
-            'nombre.min'=>'El nombre de la grupo debe tener más de 3 carácteres',
+            'nombre.required'=>'El nombre deL PRODUCTO es obligatorio',
+            'nombre.min'=>'El nombre del producto debe tener más de 3 carácteres',
             'precio.required'=>'El precio del producto es obligatorio',
             'stock.required'=>'El stock del producto es obligatorio',
         ];
@@ -112,7 +112,7 @@ class ProductoController extends Controller
         $producto->precio= $request->input('precio');
         $producto->unidad_medida= $request->input('unidad_medida');
         $producto->estado_producto= "Activo";
-        $producto->grupo_id= $request->input('grupo');
+        // $producto->grupo_id= $request->input('grupo');
         $producto->familia_id= $request->input('familia');
         // dd($subgrupo);
         $producto->save();

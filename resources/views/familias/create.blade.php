@@ -26,7 +26,7 @@
                   @endforeach
               @else
               @endif
-              <form method="POST" action="{{ url('/familias') }}">
+              <form method="POST" action="{{ url('/catalogos') }}">
                   @csrf
                   <div class="form-control">
                       <div class="input-group input-group-dynamic mb-4">
@@ -37,7 +37,7 @@
                   </div>
                   <div>
                       <button type="submit" class="btn bg-gradient-primary">Guardar</button>
-                      <a href="{{ url('/familias') }}" type="button" class="btn btn-outline-success"
+                      <a href="{{ url('/catalogos') }}" type="button" class="btn btn-outline-success"
                           title="Regresar"><i class="material-icons">arrow_back</i> Regresar</a>
                   </div>
               </form>
@@ -52,7 +52,7 @@
                     <h3 class="mb-0">Nueva Familia</h3>
                 </div>
                 <div class="col text-right">
-                    <a href="{{ url('/familias') }}" class="btn btn-sm btn-success">
+                    <a href="{{ url('/catalogos') }}" class="btn btn-sm btn-success">
                         <i class="fas fa-chevron-left"></i>
                         Regresar
                     </a>
@@ -68,10 +68,10 @@
                     </div>
                 @endforeach
             @endif
-            <form action="{{ url('/familias') }}" method="POST">
+            <form action="{{ url('/catalogos') }}" method="POST">
                 @csrf
                 <div class="form-group">
-                    <label for="nombre">Nombre de la Familia</label>
+                    <label for="nombre">Nombre del Catalogo</label>
                     <input type="text" name="nombre" class="form-control" value="{{ old('nombre') }}" id="nombre"
                         required>
                 </div>

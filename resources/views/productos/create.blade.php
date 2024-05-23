@@ -51,24 +51,24 @@
                             <div class="input-group input-group-dynamic mb-1">
                                 <label for="precio" class="form-label">PRECIO DEL PRODUCTO</label>
                                 <input type="text" name="precio" class="form-control" value="{{ old('precio') }}"
-                                    id="precio" required>
+                                    id="precio" >
                             </div>
                         </div>
                         <div class="form-control">
                             <div class="input-group input-group-dynamic mb-1">
                                 <label for="stock" class="form-label">STOCK DEL PRODUCTO</label>
                                 <input type="text" name="stock" class="form-control" value="{{ old('stock') }}"
-                                    id="stock" required>
+                                    id="stock" >
                             </div>
                         </div>
                         <div class="form-control">
                             <div class="input-group input-group-dynamic mb-1">
                                 <label for="unidad_medida" class="form-label">UNIDAD DE MEDIDA DEL PRODUCTO</label>
                                 <input type="text" name="unidad_medida" class="form-control" value="{{ old('unidad_medida') }}"
-                                    id="unidad_medida" required>
+                                    id="unidad_medida" >
                             </div>
                         </div>
-                        <div class="form-control">
+                        {{-- <div class="form-control">
                             <div class="input-group input-group-static mb-1">
                                 <label for="grupo" class="ms-0">GRUPO DEL PRODUCTO</label>
                                 <select class="form-control" id="grupo" name="grupo">
@@ -77,10 +77,10 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="form-control">
                             <div class="input-group input-group-static mb-1">
-                                <label for="familia" class="ms-0">FAMILIA DEL PRODUCTO</label>
+                                <label for="familia" class="ms-0">CATALOGO</label>
                                 <select class="form-control" id="familia" name="familia">
                                     @foreach ($familias as $familia)
                                         <option value="{{ $familia->id }}"> {{ $familia->nombre_familia }}</option>

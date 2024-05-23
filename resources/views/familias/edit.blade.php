@@ -26,7 +26,7 @@
                   @endforeach
               @else
               @endif
-              <form method="POST" action="{{ url('/familias/' . $familia->id) }}">
+              <form method="POST" action="{{ url('/catalogos/' . $familia->id) }}">
                   @method('PUT')
                   @csrf
                   <div class="form-control">
@@ -38,7 +38,7 @@
                   </div>
                   <div>
                       <button type="submit" class="btn bg-gradient-primary">Actualizar</button>
-                      <a href="{{ url('/familias') }}" type="button" class="btn btn-outline-success"
+                      <a href="{{ url('/catalogos') }}" type="button" class="btn btn-outline-success"
                           title="Regresar"><i class="material-icons">arrow_back</i> Regresar</a>
                   </div>
               </form>
@@ -53,7 +53,7 @@
                     <h3 class="mb-0">Editar CATALOGO: {{$familia->nombre}}</h3>
                 </div>
                 <div class="col text-right">
-                    <a href="{{ url('/familias') }}" class="btn btn-sm btn-success">
+                    <a href="{{ url('/catalogos') }}" class="btn btn-sm btn-success">
                         <i class="fas fa-chevron-left"></i>
                         Regresar
                     </a>
@@ -69,7 +69,7 @@
                     </div>
                 @endforeach
             @endif
-            <form action="{{ url('/familias/'.$familia->id) }}" method="POST">
+            <form action="{{ url('/catalogos/'.$familia->id) }}" method="POST">
                 @method('PUT')
                 @csrf
                 <div class="form-group">

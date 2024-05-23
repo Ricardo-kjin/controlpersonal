@@ -49,7 +49,7 @@
                 @endif
               </div>
               <div class="card-body d-flex justify-content-end pt-0 bt-0 mt-0">
-                <a href="{{ url('/familias/create') }}" class="btn btn-icon btn-3 btn-success" role="button" aria-pressed="true">
+                <a href="{{ url('/catalogos/create') }}" class="btn btn-icon btn-3 btn-success" role="button" aria-pressed="true">
                     <span class="btn-inner--icon"><i class="material-icons">queue</i></span>
                     <span class="btn-inner--text">Agregar Nuevo</span>
                 </a>
@@ -85,7 +85,7 @@
                                   </td>
 
                                   <td class="align-middle">
-                                    <a href="{{url('/familias/'.$familia->id.'/edit')}}" class="text-warning font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
+                                    <a href="{{url('/catalogos/'.$familia->id.'/edit')}}" class="text-warning font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
                                       <span class="alert-icon align-middle">
                                         <span class="material-icons text-md">
                                           edit
@@ -107,7 +107,7 @@
                                       Eliminar
                                     </a>
                                       <!-- Formulario oculto para enviar la solicitud DELETE -->
-                                    <form action="{{ URL('/familias/'.$familia->id) }}" method="POST" id="eliminarRegistroForm" style="display: none;">
+                                    <form action="{{ URL('/catalogos/'.$familia->id) }}" method="POST" id="eliminarRegistroForm" style="display: none;">
                                         @csrf
                                         @method('DELETE')
                                     </form>
@@ -150,7 +150,7 @@
                 @if (auth()->user()->role=='admin')
 
                 <div class="col text-right">
-                    <a href="{{url('/familias/create')}}" class="btn btn-sm btn-primary"> Nueva Familia</a>
+                    <a href="{{url('/catalogos/create')}}" class="btn btn-sm btn-primary"> Nueva Familia</a>
                 </div>
                 @endif
             </div>
@@ -183,11 +183,11 @@
                             {{$familia->nombre}}
                         </th>
                         <td>
-                            <form action="{{url('/familias/'.$familia->id)}}" method="POST">
+                            <form action="{{url('/catalogos/'.$familia->id)}}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 @if (auth()->user()->role=='admin')
-                                    <a href="{{url('/familias/'.$familia->id.'/edit')}}" class="btn btn-sm btn-primary">Editar</a>
+                                    <a href="{{url('/catalogos/'.$familia->id.'/edit')}}" class="btn btn-sm btn-primary">Editar</a>
                                     <button type="submit" class="btn btn-sm btn-danger">Eliminar</button>
 
                                 @endif

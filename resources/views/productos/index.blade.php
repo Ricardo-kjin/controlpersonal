@@ -70,8 +70,8 @@
                                       STOCK</th>
                                   <th class="text-uppercase  text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                       UNIDAD DE MEDIDA</th>
-                                  <th class="text-uppercase  text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                      GRUPO</th>
+                                  {{-- <th class="text-uppercase  text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                      GRUPO</th> --}}
                                   <th class="text-uppercase  text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                       CATALOGO</th>
                                     @if (auth()->user()->role=="admin")
@@ -106,10 +106,10 @@
                                           <span
                                               class="text-xs font-weight-bold mb-0 ">{{ $producto->unidad_medida }}</span>
                                       </td>
-                                      <td class="align-middle text-sm">
+                                      {{-- <td class="align-middle text-sm">
                                             <span
                                             class="text-xs font-weight-bold mb-0 ">{{ $producto->grupo->nombre_grupo }}</span>
-                                      </td>
+                                      </td> --}}
                                       <td class="align-middle text-sm">
                                             <span
                                             class="text-xs font-weight-bold mb-0 ">{{ $producto->familia->nombre_familia }}</span>
