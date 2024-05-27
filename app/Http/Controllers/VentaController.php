@@ -19,32 +19,26 @@ class VentaController extends Controller
     private $tokensecret = "9E7BC239DDC04F83B49FFDA5";
     private $commerceid = "d029fa3a95e174a19934857f535eb9427d967218a36ea014b70ad704bc6c8d1c";
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
 
-            if (auth()->user()->role=="cliente") {
+        if (auth()->user()->role == "cliente") {
+            $ventas = Venta::where('user_id', auth()->user()->id)->orderBy('id', 'asc')->get();
+            // Recorrer cada venta
+        } else {
+            # code...
+            $ventas = Venta::all();
+        }
+        foreach ($ventas as $venta) {
+            // Llamar al método ConsultarEstado para actualizar el estado de la venta
+            if ($venta->transaccion) {
+                $this->ConsultarEstado($venta->id);
                 # code...
-                $ventas=Venta::where('user_id',auth()->user()->id)->orderBy('id','asc')->get();
-                // dd($ventas);
-                // Recorrer cada venta
-            }else {
-                # code...
-                $ventas = Venta::all();
             }
-            foreach ($ventas as $venta) {
-                // Llamar al método ConsultarEstado para actualizar el estado de la venta
-                if ($venta->transaccion) {
-                    $this->ConsultarEstado($venta->id);
-                    # code...
-                }
-            }
+        }
 
-            $Commerceid = $this->commerceid;
-            return view('ventas.index', compact('ventas', 'Commerceid'));
-
+        $Commerceid = $this->commerceid;
+        return view('ventas.index', compact('ventas', 'Commerceid'));
     }
 
     /**
@@ -65,105 +59,116 @@ class VentaController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
-        // dd($request->input('promocion'));
+        // Validar los datos de entrada
+        $this->validateRequest($request);
+        // Preparar los datos para el servicio de pagos
+        $datosPago = $this->prepararDatosPago($request);
+        // Crear la venta y obtener su ID
+        $ventaId = $this->crearVenta($request);
+        // Guardar los detalles de la venta en la tabla pivote
+        $this->guardarDetalleVenta($request->input('detalle_venta'), $ventaId);
+        // Redireccionar con mensaje de notificación
+        return redirect('/ventas')->with([
+            'tcParametros' => $datosPago['tcParametros'],
+            'Commerceid' => $this->commerceid,
+            'notification' => 'La venta fue registrada correctamente',
+        ]);
+    }
 
+    protected function validateRequest(Request $request)
+    {
+        $ATokenService        = $this->tokenservice;
+        $AMoneda              = 2;
+        $ATelefono            = $request->phone;
+        $ANombreUsuario       = $request->cliente;
+        $ACiNit               = $request->cedula;
+        $ANroPago             = $request->nro_venta;
+        $AMontoClienteEmpresa = $request->total_venta;
+        $ACorreo              = $request->email;
+        $AUrlCallBack         = "https://controlpersonal-production.up.railway.app/api/url-callback";
+        $AUrlReturn           = "https://controlpersonal-production.up.railway.app/";
+        $APedidoDetalle       = $request->detalle_venta;
+        $AUrl                 = "";
+    }
 
-            //PARTE 1111111111
-            $ATokenService        = $this->tokenservice;
-            $AMoneda              = 2;
-            $ATelefono            = $request->phone;
-            $ANombreUsuario       = $request->cliente;
-            $ACiNit               = $request->cedula;
-            $ANroPago             = $request->nro_venta;
-            $AMontoClienteEmpresa = $request->total_venta;
-            $ACorreo              = $request->email;
-            $AUrlCallBack         = "https://controlpersonal-production.up.railway.app/api/url-callback";
-            $AUrlReturn           = "https://controlpersonal-production.up.railway.app/";
-            $APedidoDetalle       = $request->detalle_venta;
-            $AUrl                 = "";
+    protected function prepararDatosPago(Request $request)
+    {
 
-            // Valor original de $APedidoDetalle
-            $APedidoDetalle = '[{"serie":1,"idProducto":"6","producto":"JPK-001N","cantidad":1,"precio":0.01,"subtotal":0.01},{"serie":2,"idProducto":"7","producto":"95D31L-TOYO CARGADA","cantidad":1,"precio":0.02,"subtotal":0.02}]';
+        // Valor original de $APedidoDetalle
+        $APedidoDetalle = '[{"serie":1,
+            "idProducto":"6","producto":"JPK-001N",
+            "cantidad":1,"precio":0.01,"subtotal":0.01},
+            {"serie":2,"idProducto":"7","producto":"95D31L-TOYO CARGADA",
+            "cantidad":1,"precio":0.02,"subtotal":0.02}]';
 
-            // Decodificar el JSON a un array asociativo
-            $detalleArray = json_decode($APedidoDetalle, true);
+        // Decodificar el JSON a un array asociativo
+        $detalleArray = json_decode($APedidoDetalle, true);
 
-            // Nuevo array con las claves y valores modificados
-            $nuevoArray = array_map(function ($item) {
-                return [
-                    "Serial" => $item["serie"],
-                    "ID_Producto" => $item["idProducto"],
-                    "Producto" => $item["producto"],
-                    "LinkPago" => 0,
-                    "Cantidad" => $item["cantidad"],
-                    "Precio" => $item["precio"],
-                    "Descuento" => 0,
-                    "Total" => $item["subtotal"]
-                ];
-            }, $detalleArray);
+        // Nuevo array con las claves y valores modificados
+        $nuevoArray = array_map(function ($item) {
+            return [
+                "Serial" => $item["serie"],
+                "ID_Producto" => $item["idProducto"],
+                "Producto" => $item["producto"],
+                "LinkPago" => 0,
+                "Cantidad" => $item["cantidad"],
+                "Precio" => $item["precio"],
+                "Descuento" => 0,
+                "Total" => $item["subtotal"]
+            ];
+        }, $detalleArray);
+        // Convertir el nuevo array a formato JSON con barras invertidas
+        $ANuevoDetalle = json_encode($nuevoArray, JSON_UNESCAPED_SLASHES);
+        // Aplicar addslashes para escapar las barras invertidas
+        $cadenaEscapada = addslashes($ANuevoDetalle);
+        //Cadena a firmar
+        //“TokenService|Email|Telefono|PedidoID|Monto|Moneda|P1|P2|P3|P4”
+        $CadenaAFirmar = $ATokenService . "|" . $ACorreo . "|" . $ATelefono . "|" . $ANroPago . "|" .
+            $AMontoClienteEmpresa . "|" . $AMoneda . "|" . $AUrlCallBack . "|" . $AUrlReturn . "|" .
+            $cadenaEscapada . "|" . strval(11);
+        //Preparando la firma
+        $Firma = hash('sha256', $CadenaAFirmar);
+        //Preparando TcPArametro
+        //DatosDePago=tcFirma|Email|Telefono|PedidoID|Monto|Moneda|P1|P2|P3|P4
+        $DatosDePago = $Firma . "|" . $ACorreo . "|" . $ATelefono . "|" . $ANroPago . "|" .
+            $AMontoClienteEmpresa . "|" . $AMoneda . "|" . $AUrlCallBack . "|" . $AUrlReturn . "|" .
+            $cadenaEscapada . "|" . strval(11) . "\u0000\u0000\u0000";
+        $tcParametros = base64_encode(openssl_encrypt($DatosDePago, "DES-EDE3", $this->tokensecret, OPENSSL_ZERO_PADDING));
+    }
 
-            // Convertir el nuevo array a formato JSON con barras invertidas
-            $ANuevoDetalle = json_encode($nuevoArray, JSON_UNESCAPED_SLASHES);
-            // Aplicar addslashes para escapar las barras invertidas
-            $cadenaEscapada = addslashes($ANuevoDetalle);
-            // echo $cadenaEscapada;
-            // [{\"Serial\":1,\"ID_Producto\":"6\",\"Producto\":\"JPK-001N\",\"LinkPago\":0,\"Cantidad\":1,\"Precio\":0.01,\"Descuento\":0,\"Total\":0.01},{\"Serial\":2,\"ID_Producto\":"7\",\"producto\":\"95D31L-TOYO CARGADA\",\"LinkPago\":0,\"Cantidad\":1,\"Precio\":0.02,\"Descuento\":0,\"Total\":0.02}]
+    protected function crearVenta(Request $request)
+    {
+        // Crear la venta
+        $venta = Venta::create([
+            'user_id' => $request->input('cliente'),
+            'tipopago_id' => $request->input('tipopago'),
+            'promocion_id' => $request->input('promocion'),
+            'nro_venta' => $request->input('nro_venta'),
+            'fecha_venta' => Carbon::now()->toDateString(),
+            'total_venta' => $request->input('total_venta'),
+            'estado_venta' => "inicio",
+        ]);
+    }
 
-            //Cadena a firmar
-            //“TokenService|Email|Telefono|PedidoID|Monto|Moneda|P1|P2|P3|P4”
-            $CadenaAFirmar=$ATokenService . "|" . $ACorreo . "|" .$ATelefono."|".$ANroPago."|".$AMontoClienteEmpresa."|".$AMoneda."|".$AUrlCallBack."|".$AUrlReturn."|".$cadenaEscapada."|".strval(11);
-            // dd($CadenaAFirmar);
+    protected function guardarDetalleVenta($detalleVenta, $ventaId)
+    {
+        // Obtener el detalle de venta desde el request
+        $detalleVentaData = json_decode($request->input('detalle_venta'), true);
 
-            //Preparando la firma
-            $Firma= hash('sha256',$CadenaAFirmar);
-            // dd($Firma);
+        // Agregar registros a la tabla pivote
+        foreach ($detalleVentaData as $detalle) {
+            $productoId = $detalle['idProducto'];
+            $cantidad = $detalle['cantidad'];
+            $precio = $detalle['precio'];
+            $subtotal = $detalle['subtotal'];
 
-            //Preparando TcPArametro
-            //DatosDePago=tcFirma|Email|Telefono|PedidoID|Monto|Moneda|P1|P2|P3|P4
-            $DatosDePago=$Firma."|".$ACorreo . "|" .$ATelefono."|".$ANroPago."|".$AMontoClienteEmpresa."|".$AMoneda."|".$AUrlCallBack."|".$AUrlReturn."|".$cadenaEscapada."|".strval(11)."\u0000\u0000\u0000";
-            $tcParametros=base64_encode( openssl_encrypt($DatosDePago, "DES-EDE3", $this->tokensecret ,OPENSSL_ZERO_PADDING));
-            // dd($tcParametros);
-
-            // Crear la venta
-            $venta = Venta::create([
-                'user_id' => $request->input('cliente'),
-                'tipopago_id' => $request->input('tipopago'),
-                'promocion_id' => $request->input('promocion'),
-                'nro_venta' => $request->input('nro_venta'),
-                'fecha_venta' => Carbon::now()->toDateString(),//colocar la fecha de ahora
-                'total_venta' => $request->input('total_venta'),
-                'estado_venta' => "inicio",
-                // 'tcParametro' => $tcParametros,
+            // Attach agrega registros a la tabla pivote
+            $venta->productos()->attach($productoId, [
+                'cantidad' => $cantidad,
+                'precio' => $precio,
+                'subtotal' => $subtotal,
             ]);
-
-            // Obtener el detalle de venta desde el request
-            $detalleVentaData = json_decode($request->input('detalle_venta'), true);
-
-            // Agregar registros a la tabla pivote
-            foreach ($detalleVentaData as $detalle) {
-                $productoId = $detalle['idProducto'];
-                $cantidad = $detalle['cantidad'];
-                $precio = $detalle['precio'];
-                $subtotal = $detalle['subtotal'];
-
-                // Attach agrega registros a la tabla pivote
-                $venta->productos()->attach($productoId, [
-                    'cantidad' => $cantidad,
-                    'precio' => $precio,
-                    'subtotal' => $subtotal,
-                ]);
-            }
-
-            $notification="La venta fue registrada correctamente";
-
-            //DE ACA ERA SIGUIENDO PRUEBAS DEL SITIO WEB
-            // $loClient = new Client();
-
-        $Commerceid=$this->commerceid;
-
-         return redirect('/ventas')->with(compact('tcParametros', 'Commerceid','notification'));
-
+        }
     }
 
     /**
@@ -204,20 +209,20 @@ class VentaController extends Controller
     // }
     public function RecolectarDatos(string $id)
     {
-        $ventas=Venta::where('id',$id)->first();
-        $ventaId=$ventas->id;
+        $ventas = Venta::where('id', $id)->first();
+        $ventaId = $ventas->id;
         // Supongamos que tienes una instancia de Venta llamada $venta
         $pivotTableData = DB::table('detalle_ventas')
-        ->select('cantidad', 'precio', 'subtotal')
-        ->where('venta_id', $ventaId)
-        ->get();
+            ->select('cantidad', 'precio', 'subtotal')
+            ->where('venta_id', $ventaId)
+            ->get();
         $detallesVentas = [];
 
         foreach ($ventas->productos as $producto) {
             $detallesVentas[] = [
-                'serie'=>$producto->pivot->id,
-                'IdProducto'=>$producto->id,
-                'producto'=>$producto->nombre_producto,
+                'serie' => $producto->pivot->id,
+                'IdProducto' => $producto->id,
+                'producto' => $producto->nombre_producto,
                 'cantidad' => $producto->pivot->cantidad,
                 'precio' => $producto->pivot->precio,
                 'subtotal' => $producto->pivot->subtotal,
@@ -296,12 +301,11 @@ class VentaController extends Controller
             $laResult = json_decode($loResponse->getBody()->getContents());
             // dd($laResult);
             if ($ventas->tipopago->id == 1) {
-                if ($laResult->values==null) {
+                if ($laResult->values == null) {
                     # code...
-                    $imagenQrDeVentas= $ventas->tcParametro;
+                    $imagenQrDeVentas = $ventas->tcParametro;
                     // $ventas->estado_venta="pendiente";
                     $ventas->save();
-
                 } else {
                     # code...
                     $laValues = explode(";", $laResult->values)[1];
@@ -309,19 +313,19 @@ class VentaController extends Controller
                     // dd($laValues0,$laValues,json_decode($laValues)->id);
 
                     $laQrImage = "data:image/png;base64," . json_decode($laValues)->qrImage;
-                    $ventas->tcParametro=$laQrImage;
-                    $ventas->transaccion=$laValues0;
+                    $ventas->tcParametro = $laQrImage;
+                    $ventas->transaccion = $laValues0;
                     // $ventas->estado_venta="pendiente";
                     $ventas->save();
-                    $imagenQrDeVentas= $ventas->tcParametro;
+                    $imagenQrDeVentas = $ventas->tcParametro;
                 }
 
                 return view('ventas.qr', compact('imagenQrDeVentas'));
                 // echo '<img src="' . $laQrImage . '" alt="Imagen base64">';
             } elseif ($ventas->tipopago->id == 2) {
 
-                $ventas->transaccion=$laResult->values;
-                $ventas->estado_venta=$laResult->status;
+                $ventas->transaccion = $laResult->values;
+                $ventas->estado_venta = $laResult->status;
                 $ventas->save();
 
                 return redirect('/ventas');
@@ -370,7 +374,7 @@ class VentaController extends Controller
 
     public function ConsultarEstado(string $id)
     {
-        $venta=Venta::find($id);
+        $venta = Venta::find($id);
         $lnTransaccion = $venta->transaccion;
 
         // $lnTransaccion = $id;
@@ -396,7 +400,7 @@ class VentaController extends Controller
         $mensajeCompleto = $laResultEstadoTransaccion->values->messageEstado;
         // dd($laResultEstadoTransaccion,$mensajeCompleto);
 
-        if ($venta->tipopago_id==1) {
+        if ($venta->tipopago_id == 1) {
             # code...
 
             // Dividir la cadena usando el delimitador "-"
@@ -404,13 +408,13 @@ class VentaController extends Controller
 
             // Obtener el segundo elemento, que debería ser el estado "PROCESADO"
             $estadoProcesado = trim($partes[1]);
-            $venta->estado_venta=$estadoProcesado;
+            $venta->estado_venta = $estadoProcesado;
             $venta->save();
             // dd($laResultEstadoTransaccion->values->messageEstado,$estadoProcesado,$venta->estado_venta);
         } else {
             # code...
             $partes = explode(',', $mensajeCompleto);
-            $venta->estado_venta=trim($partes[0]);;
+            $venta->estado_venta = trim($partes[0]);;
             $venta->save();
         }
 
@@ -439,7 +443,8 @@ class VentaController extends Controller
         return response()->json($arreglo);
     }
 
-    public function verificar(Request $request){
+    public function verificar(Request $request)
+    {
         dd($request);
     }
 }

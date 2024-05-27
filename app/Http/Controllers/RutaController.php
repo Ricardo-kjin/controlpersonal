@@ -3,85 +3,54 @@
 namespace App\Http\Controllers;
 
 use App\Models\Ruta;
-use App\Models\Ubicacion;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class RutaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        if (auth()->user()->role=="admin") {
-            $rutas = Ruta::all();
-        }else {
-            $rutas = Ruta::where('user_id',auth()->user()->id)->get();
-        }
-
-        return view('rutas.index', compact('rutas'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        $users = User::all();
-        // dd($users);
-        $vendedors = User::vendedorsXAdmin()->orderBy('id', 'asc')->get();
-        // dd($vendedors);
-        //clientes que tengan una ubicacion
-        // $clientes = User::clientesXAdmin()->with('ubicacions.rutas')->get();;
-        $clientes = User::clientesXAdmin()->whereHas('ubicacions', function ($query) {
-            $query->doesntHave('rutas');
-        })->get();
-
-
-        // dd($clientes);
-        // dd($vendedors);
-        return view('rutas.create', compact('users', 'vendedors', 'clientes'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        // dd($request);
+        $this->validateRequest($request);
+        $ruta = $this->crearRuta($request);
+        $this->asignarClientesARuta($request, $ruta);
+        $notification = 'La ruta ha sido creada correctamente';
+        return redirect('/rutas')->with(compact('notification'));
+    }
+
+    protected function validateRequest(Request $request)
+    {
         $rules = [
             'codigo_ruta' => 'required',
         ];
 
         $messages = [
-            'codigo_ruta.required' => 'El codigo de la ruta es obligatorio',
+            'codigo_ruta.required' => 'El código de la ruta es obligatorio',
         ];
 
         $this->validate($request, $rules, $messages);
+    }
 
-        // dd($request->input('vendedor'));
+    protected function crearRuta(Request $request)
+    {
         $ruta = new Ruta();
         $ruta->codigo_ruta = $request->input('codigo_ruta');
         $ruta->tiempo_total = 0;
         $ruta->estado_ruta = "Pendiente";
         $ruta->user_id = $request->input('vendedor');
-
         $ruta->save();
 
-        $ruta = Ruta::latest()->first();
+        return $ruta;
+    }
+
+    protected function asignarClientesARuta(Request $request, Ruta $ruta)
+    {
         $clientesSeleccionados = $request->input('seleccionados', []);
-        // dd($clientesSeleccionados);
 
         foreach ($clientesSeleccionados as $cliente_id) {
             $fechas = $request->input('fechas.' . $cliente_id);
             $cliente = User::clientesXAdmin()->findOrFail($cliente_id);
-            // dd($cliente->ubicacions->first()->id);
-            // Aquí puedes realizar validaciones adicionales si es necesario
-            // ...
 
-            // Guardar en la tabla pivote
             $ruta->ubicacions()->attach($cliente->ubicacions->first()->id, [
                 'fecha_ini' => $fechas['inicio'],
                 'fecha_fin' => $fechas['fin'],
@@ -92,32 +61,19 @@ class RutaController extends Controller
             $fecha_fin = Carbon::createFromFormat('Y-m-d', $fechas['fin']);
             $diferencia = $fecha_inicio->diff($fecha_fin);
 
-            $ruta->tiempo_total = $ruta->tiempo_total + $diferencia->days;
-            // dd($ruta);
+            $ruta->tiempo_total += $diferencia->days;
         }
+
         $ruta->update();
-
-        $notification = 'La ruta ha sido creada correctamente';
-
-        return redirect('/rutas')->with(compact('notification'));
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show()
-    {
 
-    }
-    /**
-     * Display the specified resource.
-     */
     public function verRuta()
     {
-        $ruta=Ruta::where('user_id',auth()->user()->id)->first();
+        $ruta = Ruta::where('user_id', auth()->user()->id)->first();
         // $ruta->ubicacions->where('user_id',$cliente->id)->first()->pivot->fecha_ini;
         // dd($rutas);
-        $rutaId=$ruta->id;
+        $rutaId = $ruta->id;
         $codRuta = $ruta->codigo_ruta;
 
         $clientesEnRuta = User::whereHas('ubicacions.rutas', function ($query) use ($rutaId) {
@@ -126,28 +82,25 @@ class RutaController extends Controller
             $query->where('ruta_id', $rutaId)->withPivot('id', 'fecha_ini', 'fecha_fin', 'estado_visita');
         }])->get();
         // dd($clientesEnRuta);
-        return view('rutas.show',compact('ruta','clientesEnRuta'));
+        return view('rutas.show', compact('ruta', 'clientesEnRuta'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Ruta $ruta)
     {
         // dd($ruta);
         // $ruta = Ruta::findOrFail($ruta_id);
-        $vendedors = User::where('role','vendedor')->orderBy('id', 'asc')->get();
+        $vendedors = User::where('role', 'vendedor')->orderBy('id', 'asc')->get();
         // dd($vendedors);
         $routeId = $ruta->id; // Aquí colocas el ID de la ruta que será pasada como variable
-        $rutaId=$routeId;
+        $rutaId = $routeId;
         ///////////////////ESTA PARTE DE PRUEBA COMPLETA
 
         $clientesEnRuta = User::whereHas('ubicacions.rutas', function ($query) use ($rutaId) {
-                $query->where('ruta_id', $rutaId);
-            })->with(['ubicacions.rutas' => function ($query) use ($rutaId) {
-                $query->where('ruta_id', $rutaId)->withPivot('id', 'fecha_ini', 'fecha_fin', 'estado_visita');
-            }])->get();
-            // dd($clientesEnRuta1);
+            $query->where('ruta_id', $rutaId);
+        })->with(['ubicacions.rutas' => function ($query) use ($rutaId) {
+            $query->where('ruta_id', $rutaId)->withPivot('id', 'fecha_ini', 'fecha_fin', 'estado_visita');
+        }])->get();
+        // dd($clientesEnRuta1);
         $clientesEnRuta1 = User::where('role', 'cliente')
             ->whereHas('ubicacions', function ($query) use ($routeId) {
                 $query->whereHas('rutas', function ($query) use ($routeId) {
@@ -155,15 +108,16 @@ class RutaController extends Controller
                 });
             })
             ->get();
-
         // $clientesSinRuta = User::where('role', 'cliente')
         //     ->whereDoesntHave('ubicacions', function ($query) {
         //         $query->whereHas('rutas');
         //     })
-            // ->get();
-            $clientesSinRuta = User::where('role', 'cliente')
-            ->whereHas('ubicacions', function ($query) {$query->whereDoesntHave('rutas');})  ->get();
-            // dd($clientesConUbicacionSinRuta);
+        // ->get();
+        $clientesSinRuta = User::where('role', 'cliente')
+            ->whereHas('ubicacions', function ($query) {
+                $query->whereDoesntHave('rutas');
+            })->get();
+        // dd($clientesConUbicacionSinRuta);
 
         return view('rutas.edit', compact('ruta', 'clientesEnRuta', 'clientesSinRuta', 'vendedors'));
     }
@@ -209,7 +163,7 @@ class RutaController extends Controller
             // ...
 
             // Guardar en la tabla pivote
-            $ruta->ubicacions()->syncWithoutDetaching([$ubicaciones->first()->id=> [
+            $ruta->ubicacions()->syncWithoutDetaching([$ubicaciones->first()->id => [
                 'fecha_ini' => $fechas['inicio'],
                 'fecha_fin' => $fechas['fin'],
                 'estado_visita' => "Pendiente",
@@ -227,13 +181,5 @@ class RutaController extends Controller
         $notification = 'La ruta ha sido Actualizada correctamente';
 
         return redirect('/rutas')->with(compact('notification'));
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Ruta $ruta)
-    {
-        //
     }
 }
